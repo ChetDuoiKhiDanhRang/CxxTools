@@ -1,0 +1,61 @@
+﻿<Application x:Class="EncryptString.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:EncryptString"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Style x:Key="Border_RadianGradientBlue" TargetType="Border">
+                <Setter Property="BorderBrush" Value="#88000000"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <RadialGradientBrush GradientOrigin="0,0">
+                            <GradientStop 
+                            Color="#99005A9E" 
+                            Offset="0"/>
+                            <GradientStop 
+                            Color="#0C88DA" 
+                            Offset="0.9"/>
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="Border_RadianGradientGreen" TargetType="Border">
+                <Setter Property="BorderBrush" Value="#88000000"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <RadialGradientBrush GradientOrigin="0,0">
+                            <GradientStop 
+                            Color="#66139663" 
+                            Offset="0"/>
+                            <GradientStop 
+                            Color="#FE139663" 
+                            Offset="0.9"/>
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <Style x:Key="Border_RadianGradientOrange" TargetType="Border">
+                <Setter Property="BorderBrush" Value="#88000000"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <RadialGradientBrush GradientOrigin="0,0">
+                            <GradientStop 
+                            Color="#55FF4500" 
+                            Offset="0"/>
+                            <GradientStop 
+                            Color="#FEFF4500" 
+                            Offset="0.9"/>
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
