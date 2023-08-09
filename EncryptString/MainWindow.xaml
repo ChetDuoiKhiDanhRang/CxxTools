@@ -8,15 +8,17 @@
         FontFamily="Segoe UI"
         FontSize="14"
         Title="Encrypt String" Height="600" Width="900"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        Loaded="Window_Loaded"
+        >
     <Window.Background>
-        <SolidColorBrush Color="#FEFEFE"/>
+        <SolidColorBrush Color="#FBFBFB"/>
     </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="8"></RowDefinition>
-            <RowDefinition Height="250"></RowDefinition>
+            <RowDefinition Height="260"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -39,40 +41,80 @@
                     Margin="5,35,5,5"
                     Padding="2"
                     TextWrapping="Wrap"
-                    MaxLines="9999"
                     DragEnter="txb_DragEnter"
                     TextChanged="txb_Input_TextChanged"
+                    KeyDown="txb_Input_KeyDown"
+                    AcceptsReturn="True"
+
                     />
             </Grid>
+            
 
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
-
-                    <Button 
-                        x:Name="btnText2Hex"
-                        BorderThickness="0"
-                        Foreground="#DEDEDE"
-                        FontSize="24"
-                        Margin="5,0,5,10" 
-                        Height="36" 
+                    <Border 
                         Background="#0C88DA"
+                        CornerRadius="3"
+                        BorderThickness="0"
+                        Margin="5,0,5,10"
+                        VerticalAlignment="Center" 
                         HorizontalAlignment="Stretch"
-                        Click="btn_Click"
+                        Height="36"
                         >
-                        <Image Height="24" Source="/imgs/RightAr_24.png"/>
-                    </Button>
-                    <Button 
-                        x:Name="btnHex2Text"
+                        <Button 
+                            x:Name="btnText2Hex"
+                            Background="#0000"
+                            BorderThickness="0"
+                            Foreground="#DEDEDE"
+                            Margin="2"
+                            FontSize="24"
+                            HorizontalAlignment="Stretch"
+                            Click="btn_Click"
+                        >
+                            <Image 
+                                x:Name="img_Text2Hex"
+                                Width="24"
+                                Height="24"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                Source="{StaticResource RightArrow}"
+                                />
+                        </Button>
+
+
+                    </Border>
+
+                    <Border 
                         Background="#0C88DA"
+                        CornerRadius="3"
                         BorderThickness="0"
-                        Foreground="#DEDEDE"
-                        FontSize="24"
-                        Margin="5,10,5,0" 
-                        Height="36" 
+                        Margin="5,0,5,5"
+                        VerticalAlignment="Stretch" 
                         HorizontalAlignment="Stretch"
-                        Click="btn_Click">
-                        <Image Height="24" Source="/imgs/LeftAr_24.png"/>
-                    </Button>
+                        Height="36"
+                        >
+                        <Button 
+                            x:Name="btnHex2Text"
+                            Margin="2"
+                            Background="#0000"
+                            BorderThickness="0"
+                            Foreground="#DEDEDE"
+                            FontSize="24"
+                            HorizontalAlignment="Stretch"
+                            Click="btn_Click"
+                            >
+                            <Image 
+                                x:Name="img_Hex2Text"
+                                Width="24"
+                                Height="24"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                Source="{StaticResource LeftArrow}"
+                                >
+
+                            </Image>
+                        </Button>
+                    </Border>
                 </StackPanel>
 
             </Grid>
@@ -95,7 +137,10 @@
             </Grid>
         </Grid>
 
-        <GridSplitter Height="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <GridSplitter Height="1" Width="80"
+            Grid.Row="1" 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch">
             <GridSplitter.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Color="#00000000" Offset="0"/>
@@ -104,6 +149,8 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
+            
+            
         <Grid Grid.Row="2">
             <!--START ROW 2-->
             <StackPanel 
@@ -291,12 +338,18 @@
                 Background="#0C88DA"
                 CornerRadius="3"
                 VerticalAlignment="Bottom"
-                Height="32"
+                Height="36"
                 >
                 <StatusBar 
                     Background="#0C88DA"
                     Margin="5,5,5,5"
                     >
+                    <StatusBarItem
+                        x:Name="statusItem1"
+                        Foreground="#FBFBFB"
+                        FontWeight="SemiBold"
+                        Content="Encrypt string - CxxTools"
+                        HorizontalAlignment="Left"/>
                 </StatusBar>
             </Border>
         </Grid>

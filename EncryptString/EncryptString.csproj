@@ -5,16 +5,29 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>imgs\app.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <!--<ItemGroup>
+    <None Remove="imgs\app.ico" />
+    <None Remove="imgs\LeftAr_24.png" />
+    <None Remove="imgs\RightAr_24.png" />
+  </ItemGroup>-->
+
   <ItemGroup>
-    <Folder Include="imgs\" />
+    <Content Include="imgs\app.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="CxxBaseTools">
       <HintPath>..\..\CxxLibs\CxxBaseTools\bin\Debug\net6.0\CxxBaseTools.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="imgs\app.ico" />
+    <Resource Include="imgs\LeftAr_24.png" />
+    <Resource Include="imgs\RightAr_24.png"/>
   </ItemGroup>
 
 </Project>
