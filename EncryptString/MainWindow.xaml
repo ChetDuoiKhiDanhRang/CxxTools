@@ -5,20 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EncryptString"
         mc:Ignorable="d"
-        FontFamily="Consolas"
+        FontFamily="Segoe UI"
         FontSize="12"
-        Title="MainWindow" Height="600" Width="800">
+        Title="Encrypt String" Height="600" Width="800">
     <Window.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Offset="0.15" Color="#FBFBFB"/>
-            <GradientStop Offset="0.5" Color="#FBFBFB"/>
-            <GradientStop Offset="0.85" Color="#FBFBFB"/>
-        </LinearGradientBrush>
+        <SolidColorBrush Color="#FEFEFE"/>
     </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="1"></RowDefinition>
+            <RowDefinition Height="24"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -39,7 +35,7 @@
                     Margin="5,35,5,5"
                     Padding="2"
                     Text="..." 
-                    TextWrapping="WrapWithOverflow"
+                    TextWrapping="Wrap"
                     />
             </Grid>
 
@@ -48,10 +44,22 @@
                     <Button 
                         Background="#0C88DA"
                         BorderThickness="0"
-                        Content="" 
-                        Margin="5" 
-                        Height="32" 
+                        Foreground="#DEDEDE"
+                        FontSize="24"
+                        Margin="5,0,5,10" 
+                        Height="36" 
                         HorizontalAlignment="Stretch">
+                        <Image Height="24" Source="/imgs/RightAr_24.png"/>
+                    </Button>
+                    <Button 
+                        Background="#0C88DA"
+                        BorderThickness="0"
+                        Foreground="#DEDEDE"
+                        FontSize="24"
+                        Margin="5,10,5,0" 
+                        Height="36" 
+                        HorizontalAlignment="Stretch">
+                        <Image Height="24" Source="/imgs/LeftAr_24.png"/>
                     </Button>
                 </StackPanel>
 
@@ -67,12 +75,12 @@
                     Margin="5,35,5,5"
                     Padding="2"
                     Text="..."
-                    TextWrapping="WrapWithOverflow"
+                    TextWrapping="Wrap"
                     />
             </Grid>
         </Grid>
 
-        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <GridSplitter Height="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <GridSplitter.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Color="#00000000" Offset="0"/>
@@ -81,7 +89,45 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
+        <Grid Grid.Row="2">
+            <StackPanel 
+                VerticalAlignment="Top" 
+                Orientation="Vertical"
+                >
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        >
+                    <DockPanel>
+                        <Label DockPanel.Dock="Left" Content="MD5:" Margin="2,2,2,2"/>
+                        <Button
+                            Content="Copy" 
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            />
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                VerticalAlignment="Center"
+                                Text="Press button on the left to copy" 
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+            </StackPanel>
+            <StatusBar 
+                VerticalAlignment="Bottom">
+
+            </StatusBar>
 
 
+        </Grid>
     </Grid>
 </Window>
