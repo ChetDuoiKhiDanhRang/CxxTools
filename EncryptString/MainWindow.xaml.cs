@@ -35,7 +35,14 @@ namespace EncryptString
             }
             else if (btn.Name == btnHex2Text.Name)
             {
-                txb_Input.Text = StringHandler.HexcodeToString(txb_Hex.Text, Encoding.UTF8);
+                try
+                {
+                    txb_Input.Text = StringHandler.HexcodeToString(txb_Hex.Text, Encoding.UTF8);
+                }
+                catch (Exception ex)
+                {
+                    txb_Input.Text = ex.Message;
+                }
             }
         }
 
@@ -60,6 +67,7 @@ namespace EncryptString
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Button bt = (Button)sender;
+            //Clipboard.Clear();
             if (bt.Name == btnCopy_MD5.Name)
             {
                 Clipboard.SetText(tblk_MD5.Text, TextDataFormat.Text);
@@ -71,7 +79,6 @@ namespace EncryptString
             else if (bt.Name == btnCopy_SHA256.Name)
             {
                 Clipboard.SetText(tblk_SHA256.Text, TextDataFormat.Text);
-
             }
             else if (bt.Name == btnCopy_SHA384.Name)
             {
@@ -82,6 +89,11 @@ namespace EncryptString
                 Clipboard.SetText(tblk_SHA512.Text, TextDataFormat.Text);
             }
 
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

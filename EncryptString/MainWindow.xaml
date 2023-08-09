@@ -6,16 +6,17 @@
         xmlns:local="clr-namespace:EncryptString"
         mc:Ignorable="d"
         FontFamily="Segoe UI"
-        FontSize="12"
-        Title="Encrypt String" Height="600" Width="800">
+        FontSize="14"
+        Title="Encrypt String" Height="600" Width="900"
+        MouseDown="Window_MouseDown">
     <Window.Background>
         <SolidColorBrush Color="#FEFEFE"/>
     </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="24"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="8"></RowDefinition>
+            <RowDefinition Height="250"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -29,6 +30,7 @@
                 <Label
                     Margin="5,5,5,0"
                     VerticalAlignment="Top"
+                    FontWeight="SemiBold"
                     Content="Input string:"/>
                 <TextBox
                     x:Name="txb_Input"
@@ -37,6 +39,7 @@
                     Margin="5,35,5,5"
                     Padding="2"
                     TextWrapping="Wrap"
+                    MaxLines="9999"
                     DragEnter="txb_DragEnter"
                     TextChanged="txb_Input_TextChanged"
                     />
@@ -44,14 +47,15 @@
 
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+
                     <Button 
                         x:Name="btnText2Hex"
-                        Background="#0C88DA"
                         BorderThickness="0"
                         Foreground="#DEDEDE"
                         FontSize="24"
                         Margin="5,0,5,10" 
                         Height="36" 
+                        Background="#0C88DA"
                         HorizontalAlignment="Stretch"
                         Click="btn_Click"
                         >
@@ -77,6 +81,7 @@
                 <Label
                     Margin="5,5,5,0"
                     VerticalAlignment="Top"
+                    FontWeight="SemiBold"
                     Content="Hex string:"/>
                 <TextBox
                     x:Name="txb_Hex"
@@ -99,13 +104,15 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
-        <Grid Grid.Row="2"> <!--START ROW 2-->
+        <Grid Grid.Row="2">
+            <!--START ROW 2-->
             <StackPanel 
                 VerticalAlignment="Top" 
                 Orientation="Vertical"
                 >
                 <Border Margin="5" 
                         Background="#0C88DA"
+                        CornerRadius="3"
                         >
                     <DockPanel>
                         <Label
@@ -139,6 +146,7 @@
 
                 <Border Margin="5" 
                         Background="#0C88DA"
+                        CornerRadius="3"
                         >
                     <DockPanel>
                         <Label
@@ -151,6 +159,8 @@
                             BorderThickness="0"
                             Background="#00000000"
                             Margin="2,2,2,2"
+                            Click="btnCopy_Click"
+                            
                             />
                         <Border
                             DockPanel.Dock="Left"
@@ -171,6 +181,7 @@
 
                 <Border Margin="5" 
                         Background="#0C88DA"
+                        CornerRadius="3"
                         >
                     <DockPanel>
                         <Label
@@ -183,6 +194,7 @@
                             BorderThickness="0"
                             Background="#00000000"
                             Margin="2,2,2,2"
+                            Click="btnCopy_Click"
                             />
                         <Border
                             DockPanel.Dock="Left"
@@ -203,6 +215,7 @@
 
                 <Border Margin="5" 
                         Background="#0C88DA"
+                        CornerRadius="3"
                         >
                     <DockPanel>
                         <Label
@@ -217,6 +230,7 @@
                             BorderThickness="0"
                             Background="#00000000"
                             Margin="2,2,2,2"
+                            Click="btnCopy_Click"
                             />
                         <Border
                             DockPanel.Dock="Left"
@@ -237,6 +251,7 @@
 
                 <Border Margin="5" 
                         Background="#0C88DA"
+                        CornerRadius="3"
                         >
                     <DockPanel>
                         <Label
@@ -251,6 +266,7 @@
                             BorderThickness="0"
                             Background="#00000000"
                             Margin="2,2,2,2"
+                            Click="btnCopy_Click"
                             />
                         <Border
                             DockPanel.Dock="Left"
@@ -270,14 +286,20 @@
                 </Border>
 
             </StackPanel>
-            <StatusBar 
+            <Border 
+                Margin="5" 
+                Background="#0C88DA"
+                CornerRadius="3"
                 VerticalAlignment="Bottom"
                 Height="32"
-                Background="#0C88DA"
-                Margin="5,5,5,5"
                 >
-
-            </StatusBar>
-        </Grid><!--End ROW2-->
+                <StatusBar 
+                    Background="#0C88DA"
+                    Margin="5,5,5,5"
+                    >
+                </StatusBar>
+            </Border>
+        </Grid>
+        <!--End ROW2-->
     </Grid>
 </Window>
