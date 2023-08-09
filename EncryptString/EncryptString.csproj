@@ -11,4 +11,10 @@
     <Folder Include="imgs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CxxBaseTools">
+      <HintPath>..\..\CxxLibs\CxxBaseTools\bin\Debug\net6.0\CxxBaseTools.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -31,34 +31,42 @@
                     VerticalAlignment="Top"
                     Content="Input string:"/>
                 <TextBox
+                    x:Name="txb_Input"
+                    AllowDrop="True"
                     Background="#00FFFFFF"
                     Margin="5,35,5,5"
                     Padding="2"
-                    Text="..." 
                     TextWrapping="Wrap"
+                    DragEnter="txb_DragEnter"
+                    TextChanged="txb_Input_TextChanged"
                     />
             </Grid>
 
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
                     <Button 
+                        x:Name="btnText2Hex"
                         Background="#0C88DA"
                         BorderThickness="0"
                         Foreground="#DEDEDE"
                         FontSize="24"
                         Margin="5,0,5,10" 
                         Height="36" 
-                        HorizontalAlignment="Stretch">
+                        HorizontalAlignment="Stretch"
+                        Click="btn_Click"
+                        >
                         <Image Height="24" Source="/imgs/RightAr_24.png"/>
                     </Button>
                     <Button 
+                        x:Name="btnHex2Text"
                         Background="#0C88DA"
                         BorderThickness="0"
                         Foreground="#DEDEDE"
                         FontSize="24"
                         Margin="5,10,5,0" 
                         Height="36" 
-                        HorizontalAlignment="Stretch">
+                        HorizontalAlignment="Stretch"
+                        Click="btn_Click">
                         <Image Height="24" Source="/imgs/LeftAr_24.png"/>
                     </Button>
                 </StackPanel>
@@ -71,11 +79,13 @@
                     VerticalAlignment="Top"
                     Content="Hex string:"/>
                 <TextBox
+                    x:Name="txb_Hex"
+                    AllowDrop="True"
                     Background="#00FFFFFF"
                     Margin="5,35,5,5"
                     Padding="2"
-                    Text="..."
                     TextWrapping="Wrap"
+                    DragEnter="txb_DragEnter"
                     />
             </Grid>
         </Grid>
@@ -89,7 +99,7 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2"> <!--START ROW 2-->
             <StackPanel 
                 VerticalAlignment="Top" 
                 Orientation="Vertical"
@@ -98,8 +108,44 @@
                         Background="#0C88DA"
                         >
                     <DockPanel>
-                        <Label DockPanel.Dock="Left" Content="MD5:" Margin="2,2,2,2"/>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" Content="MD5:" Margin="2,2,2,2"/>
                         <Button
+                            x:Name="btnCopy_MD5"
+                            Content="Copy" 
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            Click="btnCopy_Click"
+                            />
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_MD5"
+                                VerticalAlignment="Center"
+                                Text="Press button on the left to copy" 
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        >
+                    <DockPanel>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" Content="SHA1:" Margin="2,2,2,2"/>
+                        <Button
+                            x:Name="btnCopy_SHA1"
                             Content="Copy" 
                             DockPanel.Dock="Right"
                             BorderThickness="0"
@@ -112,10 +158,112 @@
                             Background="#FBFBFB" 
                             BorderThickness="0">
                             <TextBox
+                                x:Name="tblk_SHA1"
                                 VerticalAlignment="Center"
                                 Text="Press button on the left to copy" 
                                 BorderThickness="0"
                                 TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        >
+                    <DockPanel>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" Content="SHA256:" Margin="2,2,2,2"/>
+                        <Button
+                            Content="Copy" 
+                            x:Name="btnCopy_SHA256"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            />
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_SHA256"
+                                VerticalAlignment="Center"
+                                Text="Press button on the left to copy" 
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        >
+                    <DockPanel>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" 
+                            Content="SHA384:" 
+                            Margin="2,2,2,2"/>
+                        <Button
+                            Content="Copy" 
+                            x:Name="btnCopy_SHA384"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            />
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_SHA384"
+                                VerticalAlignment="Center"
+                                Text="Press button on the left to copy" 
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        >
+                    <DockPanel>
+                        <Label
+                            x:Name="lbl_SHA512"
+                            DockPanel.Dock="Left" 
+                            Content="SHA512:" 
+                            Margin="2,2,2,2"/>
+                        <Button
+                            x:Name="btnCopy_SHA512"
+                            Content="Copy" 
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            />
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_SHA512"
+                                VerticalAlignment="Center"
+                                Text="Press button on the left to copy" 
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
                                 />
                         </Border>
                     </DockPanel>
@@ -123,11 +271,13 @@
 
             </StackPanel>
             <StatusBar 
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom"
+                Height="32"
+                Background="#0C88DA"
+                Margin="5,5,5,5"
+                >
 
             </StatusBar>
-
-
-        </Grid>
+        </Grid><!--End ROW2-->
     </Grid>
 </Window>
