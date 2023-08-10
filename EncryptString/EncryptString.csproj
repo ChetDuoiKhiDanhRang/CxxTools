@@ -8,6 +8,10 @@
     <ApplicationIcon>imgs\app.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="imgs\copy_24.png" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <None Remove="imgs\app.ico" />
     <None Remove="imgs\LeftAr_24.png" />
@@ -26,8 +30,9 @@
 
   <ItemGroup>
     <Resource Include="imgs\app.ico" />
+    <Resource Include="imgs\copy_24.png" />
     <Resource Include="imgs\LeftAr_24.png" />
-    <Resource Include="imgs\RightAr_24.png"/>
+    <Resource Include="imgs\RightAr_24.png" />
   </ItemGroup>
 
 </Project>
