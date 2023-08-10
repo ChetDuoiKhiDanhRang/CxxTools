@@ -10,6 +10,7 @@
         Title="Encrypt String" Height="600" Width="900"
         MouseDown="Window_MouseDown"
         Loaded="Window_Loaded"
+        Icon="{StaticResource WindowsIcon}"
         >
     <Window.Background>
         <SolidColorBrush Color="#FBFBFB"/>
@@ -36,6 +37,7 @@
                     Content="Input string:"/>
                 <TextBox
                     x:Name="txb_Input"
+                    Style="{StaticResource stlMatchName}"
                     AllowDrop="True"
                     Background="#00FFFFFF"
                     Margin="5,35,5,5"
@@ -53,7 +55,7 @@
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
                     <Border 
-                        Background="#0C88DA"
+                        Background="#005A9E"
                         CornerRadius="3"
                         BorderThickness="0"
                         Margin="5,0,5,10"
@@ -85,7 +87,7 @@
                     </Border>
 
                     <Border 
-                        Background="#0C88DA"
+                        Background="#005A9E"
                         CornerRadius="3"
                         BorderThickness="0"
                         Margin="5,0,5,5"
@@ -173,13 +175,18 @@
                             Margin="2,2,2,2"
                             Width="32"
                             Click="btnCopy_Click">
-                            <Image Width="24" Height="24" Source="{StaticResource Copy}"/>
+                            <Image
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="24" Height="24" 
+                                Source="{StaticResource Copy}"/>
                         </Button>
                         <Border
                             DockPanel.Dock="Left"
                             Margin="0,2,2,2" 
-                            Background="#FBFBFB" 
-                            BorderThickness="0">
+                            Background="#FBFBFB"
+                            BorderThickness="0"
+                            >
                             <TextBox
                                 x:Name="tblk_MD5"
                                 VerticalAlignment="Center"
@@ -187,6 +194,7 @@
                                 BorderThickness="0"
                                 TextWrapping="NoWrap"
                                 IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
                                 />
                         </Border>
                     </DockPanel>
@@ -222,6 +230,7 @@
                                 BorderThickness="0"
                                 TextWrapping="NoWrap"
                                 IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
                                 />
                         </Border>
                     </DockPanel>
@@ -257,6 +266,7 @@
                                 BorderThickness="0"
                                 TextWrapping="NoWrap"
                                 IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
                                 />
                         </Border>
                     </DockPanel>
@@ -295,6 +305,7 @@
                                 BorderThickness="0"
                                 TextWrapping="NoWrap"
                                 IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
                                 />
                         </Border>
                     </DockPanel>
@@ -332,6 +343,7 @@
                                 BorderThickness="0"
                                 TextWrapping="NoWrap"
                                 IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
                                 />
                         </Border>
                     </DockPanel>
@@ -340,13 +352,13 @@
             </StackPanel>
             <Border 
                 Margin="5" 
-                Background="#0C88DA"
+                Background="#005A9E"
                 CornerRadius="3"
                 VerticalAlignment="Bottom"
                 Height="36"
                 >
                 <StatusBar 
-                    Background="#0C88DA"
+                    Background="#00000000"
                     Margin="5,5,5,5"
                     >
                     <StatusBarItem

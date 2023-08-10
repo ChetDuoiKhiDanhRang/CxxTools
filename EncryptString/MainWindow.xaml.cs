@@ -50,7 +50,7 @@ namespace EncryptString
         {
             e.Effects = DragDropEffects.Copy;
             var txb = (TextBox)sender;
-            txb.Text = e.Data.GetData("Text").ToString();
+            txb.Text += e.Data.GetData("Text").ToString();
         }
 
         private void txb_Input_TextChanged(object sender, TextChangedEventArgs e)
