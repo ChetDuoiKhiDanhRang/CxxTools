@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RegexChecking (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "RegexChecking (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
