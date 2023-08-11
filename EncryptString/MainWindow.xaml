@@ -82,8 +82,6 @@
                                 Source="{StaticResource RightArrow}"
                                 />
                         </Button>
-
-
                     </Border>
 
                     <Border 
