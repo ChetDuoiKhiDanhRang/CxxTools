@@ -1,0 +1,375 @@
+﻿<Window x:Class="EncryptString.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EncryptString"
+        mc:Ignorable="d"
+        FontFamily="Segoe UI"
+        FontSize="14"
+        Title="Encrypt String" Height="600" Width="900"
+        MouseDown="Window_MouseDown"
+        Loaded="Window_Loaded"
+        Icon="{StaticResource WindowsIcon}"
+        >
+    <Window.Background>
+        <SolidColorBrush Color="#FBFBFB"/>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="8"></RowDefinition>
+            <RowDefinition Height="260"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="48"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Label
+                    Margin="5,5,5,0"
+                    VerticalAlignment="Top"
+                    FontWeight="SemiBold"
+                    Content="Input string:"/>
+                <TextBox
+                    x:Name="txb_Input"
+                    Style="{StaticResource stlMatchName}"
+                    AllowDrop="True"
+                    Background="#00FFFFFF"
+                    Margin="5,35,5,5"
+                    Padding="2"
+                    TextWrapping="Wrap"
+                    DragEnter="txb_DragEnter"
+                    TextChanged="txb_Input_TextChanged"
+                    KeyDown="txb_Input_KeyDown"
+                    AcceptsReturn="True"
+
+                    />
+            </Grid>
+            
+
+            <Grid Grid.Column="1">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                    <Border 
+                        Background="#005A9E"
+                        CornerRadius="3"
+                        BorderThickness="0"
+                        Margin="5,0,5,10"
+                        VerticalAlignment="Center" 
+                        HorizontalAlignment="Stretch"
+                        Height="36"
+                        >
+                        <Button 
+                            x:Name="btnText2Hex"
+                            Background="#0000"
+                            BorderThickness="0"
+                            Foreground="#DEDEDE"
+                            Margin="2"
+                            FontSize="24"
+                            HorizontalAlignment="Stretch"
+                            Click="btn_Click"
+                        >
+                            <Image 
+                                x:Name="img_Text2Hex"
+                                Width="24"
+                                Height="24"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                Source="{StaticResource RightArrow}"
+                                />
+                        </Button>
+
+
+                    </Border>
+
+                    <Border 
+                        Background="#005A9E"
+                        CornerRadius="3"
+                        BorderThickness="0"
+                        Margin="5,0,5,5"
+                        VerticalAlignment="Stretch" 
+                        HorizontalAlignment="Stretch"
+                        Height="36"
+                        >
+                        <Button 
+                            x:Name="btnHex2Text"
+                            Margin="2"
+                            Background="#0000"
+                            BorderThickness="0"
+                            Foreground="#DEDEDE"
+                            FontSize="24"
+                            HorizontalAlignment="Stretch"
+                            Click="btn_Click"
+                            >
+                            <Image 
+                                x:Name="img_Hex2Text"
+                                Width="24"
+                                Height="24"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                Source="{StaticResource LeftArrow}"
+                                >
+
+                            </Image>
+                        </Button>
+                    </Border>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <Label
+                    Margin="5,5,5,0"
+                    VerticalAlignment="Top"
+                    FontWeight="SemiBold"
+                    Content="Hex string:"/>
+                <TextBox
+                    x:Name="txb_Hex"
+                    AllowDrop="True"
+                    Background="#00FFFFFF"
+                    Margin="5,35,5,5"
+                    Padding="2"
+                    TextWrapping="Wrap"
+                    DragEnter="txb_DragEnter"
+                    />
+            </Grid>
+        </Grid>
+
+        <GridSplitter Height="1" Width="80"
+            Grid.Row="1" 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch">
+            <GridSplitter.Background>
+                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#FF000000" Offset="0.5"/>
+                    <GradientStop Color="#00000000" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+            
+            
+        <Grid Grid.Row="2">
+            <!--START ROW 2-->
+            <StackPanel 
+                VerticalAlignment="Top" 
+                Orientation="Vertical"
+                >
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        CornerRadius="3"
+                        >
+                    <DockPanel>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" Content="MD5:" Margin="2,2,2,2"/>
+                        <Button
+                            x:Name="btnCopy_MD5"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            Width="32"
+                            Click="btnCopy_Click">
+                            <Image
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="24" Height="24" 
+                                Source="{StaticResource Copy}"/>
+                        </Button>
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB"
+                            BorderThickness="0"
+                            >
+                            <TextBox
+                                x:Name="tblk_MD5"
+                                VerticalAlignment="Center"
+                                Text="(Press button on the right to copy)"
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        CornerRadius="3"
+                        >
+                    <DockPanel>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" Content="SHA1:" Margin="2,2,2,2"/>
+                        <Button
+                            x:Name="btnCopy_SHA1"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            Click="btnCopy_Click"
+                            Width="32">
+                            <Image Width="24" Height="24" Source="{StaticResource Copy}"/>
+                        </Button>
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_SHA1"
+                                VerticalAlignment="Center"
+                                Text="(Press button on the right to copy)"
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        CornerRadius="3"
+                        >
+                    <DockPanel>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" Content="SHA256:" Margin="2,2,2,2"/>
+                        <Button
+                            x:Name="btnCopy_SHA256"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            Click="btnCopy_Click"
+                            Width="32">
+                            <Image Width="24" Height="24" Source="{StaticResource Copy}"/>
+                        </Button>
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_SHA256"
+                                VerticalAlignment="Center"
+                                Text="(Press button on the right to copy)"
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        CornerRadius="3"
+                        >
+                    <DockPanel>
+                        <Label
+                            Width="{Binding ElementName=lbl_SHA512, Path=ActualWidth}"
+                            DockPanel.Dock="Left" 
+                            Content="SHA384:" 
+                            Margin="2,2,2,2"/>
+                        <Button
+                            x:Name="btnCopy_SHA384"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            Click="btnCopy_Click"
+                            Width="32"
+                            >
+                            <Image Height="24" Width="24" Source="{StaticResource Copy}"/>
+                        </Button>
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_SHA384"
+                                VerticalAlignment="Center"
+                                Text="(Press button on the right to copy)" 
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+                <Border Margin="5" 
+                        Background="#0C88DA"
+                        CornerRadius="3"
+                        >
+                    <DockPanel>
+                        <Label
+                            x:Name="lbl_SHA512"
+                            DockPanel.Dock="Left" 
+                            Content="SHA512:" 
+                            Margin="2,2,2,2"/>
+                        <Button
+                            x:Name="btnCopy_SHA512"
+                            Width="32"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Background="#00000000"
+                            Margin="2,2,2,2"
+                            Click="btnCopy_Click">
+                            <Image Width="24" Height="24" Source="{StaticResource Copy}"/>
+                        </Button>
+                        <Border
+                            DockPanel.Dock="Left"
+                            Margin="0,2,2,2" 
+                            Background="#FBFBFB" 
+                            BorderThickness="0">
+                            <TextBox
+                                x:Name="tblk_SHA512"
+                                VerticalAlignment="Center"
+                                Text="(Press button on the right to copy)"
+                                BorderThickness="0"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                Style="{StaticResource stlMatchName}"
+                                />
+                        </Border>
+                    </DockPanel>
+                </Border>
+
+            </StackPanel>
+            <Border 
+                Margin="5" 
+                Background="#005A9E"
+                CornerRadius="3"
+                VerticalAlignment="Bottom"
+                Height="36"
+                >
+                <StatusBar 
+                    Background="#00000000"
+                    Margin="5,5,5,5"
+                    >
+                    <StatusBarItem
+                        x:Name="statusItem1"
+                        Foreground="#FBFBFB"
+                        FontWeight="SemiBold"
+                        Content="Encrypt string - CxxTools"
+                        HorizontalAlignment="Left"/>
+                </StatusBar>
+            </Border>
+        </Grid>
+        <!--End ROW2-->
+    </Grid>
+</Window>
