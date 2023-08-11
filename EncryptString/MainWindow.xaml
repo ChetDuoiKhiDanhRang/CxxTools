@@ -50,7 +50,7 @@
 
                     />
             </Grid>
-            
+
 
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
@@ -149,10 +149,10 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
-            
-            
+
+
+        <!--START ROW 2-->
         <Grid Grid.Row="2">
-            <!--START ROW 2-->
             <StackPanel 
                 VerticalAlignment="Top" 
                 Orientation="Vertical"

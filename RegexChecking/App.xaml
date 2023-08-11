@@ -1,0 +1,21 @@
+﻿<Application x:Class="RegexChecking.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:RegexChecking"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Style x:Key="RoundedBorderBlue" TargetType="Border">
+                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="#0C88DA"/>
+            </Style>
+            <Style x:Key="RoundedBorderGreen" TargetType="Border">
+                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="#0CDA79"/>
+            </Style>
+            <BitmapImage x:Key="search" UriSource="/imgs/search.png"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

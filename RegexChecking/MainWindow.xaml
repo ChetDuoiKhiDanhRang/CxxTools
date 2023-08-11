@@ -1,0 +1,192 @@
+﻿<Window x:Class="RegexChecking.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RegexChecking"
+        mc:Ignorable="d"
+        Title="Regex Checking" Height="450" Width="800"
+        FontFamily="Segoe UI" FontSize="13"
+        >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="1"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="155"></RowDefinition>
+            <RowDefinition Height="1"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <GridSplitter 
+            Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Background="#00222222"/>
+        <GridSplitter
+            Grid.Column="0" Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="#00222222"/>
+        <Grid
+            Margin="5"
+            Grid.Column="0" Grid.Row="0">
+            <DockPanel>
+                <Border DockPanel.Dock="Top" Style="{StaticResource RoundedBorderBlue}">
+                    <DockPanel>
+                        <Label 
+                            Margin="5,3,0,3"
+                            DockPanel.Dock="Left"
+                            Content="Pattern: " 
+                            VerticalContentAlignment="Center"
+                            Foreground="#FBFBFB"
+                            />
+                        <Button
+                            x:Name="btnSearch"
+                            DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            Margin="5,3,5,3"
+                            Background="#00000000"
+                            VerticalContentAlignment="Center"
+                            Click="btnSearch_Click">
+                            <Image
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                Source="{StaticResource search}"
+                                Stretch="Uniform"
+                                />
+                        </Button>
+                        <TextBox
+                            x:Name="txbPattern"
+                            VerticalContentAlignment="Center"
+                            Background="#0000"
+                            BorderThickness="0"
+                            Foreground="#FBFBFB"
+                            Margin="0,3,0,3"
+                            Text="fdsfdsgdsfgf"
+                            />
+                    </DockPanel>
+                </Border>
+                <WrapPanel
+                    Margin="0,5,0,0"
+                    Orientation="Vertical"
+                    VerticalAlignment="Stretch"
+                    >
+                    <CheckBox
+                        x:Name="ckbIgnoreCase"
+                        Content="Ignore Case"
+                        IsChecked="True"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbMultiline"
+                        Content="Multiline"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"                        
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbExplicitCapture"
+                        Content="Explicit Capture"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbCompiled"
+                        Content="Compiled"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbSingleline"
+                        Content="Singleline"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbIgnorePatternWhitespace"
+                        Content="Ignore Pattern Whitespace"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbRightToLeft"
+                        Content="Right To Left"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbECMAScript"
+                        Content="ECMA Script"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                    <CheckBox
+                        x:Name="ckbCultureInvariant"
+                        Content="Culture Invariant"
+                        Foreground="#005A9E"
+                        FontWeight="Medium"
+                        Margin="0,0,5,5"/>
+                </WrapPanel>
+
+            </DockPanel>
+        </Grid>
+
+        <Border
+            Margin="5"
+            Grid.Column="0" Grid.Row="2">
+            <TreeView
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                x:Name="trvResult"
+                Foreground="#005A9E"
+                FontWeight="Medium"
+                >
+            </TreeView>
+        </Border>
+        <Grid
+            Margin="5"
+            Grid.Column="2"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            >
+            <DockPanel>
+                <Border DockPanel.Dock="Top"  Style="{StaticResource RoundedBorderGreen}">
+                    <DockPanel >
+                        <Label
+                            VerticalAlignment="Top"
+                            Margin="5,3,0,3"
+                            Content="Font:"/>
+                        <ComboBox
+                            x:Name="cmbFont"
+                            SelectedIndex="0"
+                            Margin="3,3,3,3"
+                            Background="#00000000"
+                            HorizontalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            ItemsSource="{x:Static Fonts.SystemFontFamilies}"/>
+                    </DockPanel>
+                </Border>
+                <TextBox
+                    Margin="0,5,0,0"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    BorderBrush="DarkGreen"
+                    FontFamily="{Binding ElementName=cmbFont, Path=SelectedItem}"
+                    AcceptsTab="True"
+                    AcceptsReturn="True"
+                    TextWrapping="Wrap"
+                    >
+
+                </TextBox>
+                
+            </DockPanel>
+
+        </Grid>
+
+
+    </Grid>
+</Window>
