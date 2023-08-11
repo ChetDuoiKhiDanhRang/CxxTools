@@ -32,5 +32,11 @@ namespace RegexChecking
             ObjRegex = new Regex(txbPattern.Text);
 
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+            e.Handled = false;
+        }
     }
 }

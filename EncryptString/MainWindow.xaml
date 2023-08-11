@@ -47,7 +47,6 @@
                     TextChanged="txb_Input_TextChanged"
                     KeyDown="txb_Input_KeyDown"
                     AcceptsReturn="True"
-
                     />
             </Grid>
 

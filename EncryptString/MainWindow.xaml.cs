@@ -115,5 +115,10 @@ namespace EncryptString
         {
             statusItem1.Content = "Key down: " + e.Key.ToString();
         }
+
+        private void txb_Input_KeyDown_1(object sender, KeyEventArgs e)
+        {
+
+        }
     }
 }
