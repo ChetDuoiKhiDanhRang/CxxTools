@@ -145,6 +145,7 @@
                 HorizontalAlignment="Stretch"
                 x:Name="trvResult"
                 Foreground="#005A9E"
+                SelectedItemChanged="trvResult_SelectedItemChanged"
                 >
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate 
@@ -195,13 +196,19 @@
                     FontFamily="{Binding ElementName=cmbFont, Path=SelectedItem}"
                     AcceptsTab="True"
                     AcceptsReturn="True"
-                    
-                    >
-
-                </RichTextBox>
-                
+                    />
             </DockPanel>
-
         </Grid>
+        <!--<StatusBar 
+            Grid.Column="0"
+            Grid.Row="2"
+            Grid.ColumnSpan="3"
+            Background="#00399A" VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock
+                    Foreground="#FBFBFB"
+                    Text="{Binding ElementName=txbContent, Path=CaretPosition.DocumentStart}"/>
+            </StatusBarItem>
+        </StatusBar>-->
     </Grid>
 </Window>

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -28,15 +32,16 @@ namespace RegexChecking
             trvResult.ItemsSource = MatchesResult;
             FlowDocument fd = new FlowDocument();
             Paragraph pr = new Paragraph();
-            pr.Inlines.Add("frlopp@advantage-intentions.site\r\n" +
-                "marketing@sw.solarwinds.com\r\n" +
-                "a.smith@solarwinds.com\r\n" +
-                "noreply@t.tiki.vn\r\n" +
-                "123.234.edc.asdf@google-mail.fake-address.com-fuking\r\n" +
-                "12@gmail.com\r\n" +
-                "123..456..abc@gmail.com\r\nabc.def.@gmail.com\r\n" +
-                "thiisalongnamewithmorethan30characters@gmail.com\r\n\r\n" +
-                "02053787774\r\n02053.123.456\r\n+84946157234\r\n09861452563\r\n0975-631-366\r\n" +
+            pr.Inlines.Add("frlopp@advantage-intentions.site\n");
+            pr.Inlines.Add("marketing@sw.solarwinds.com\n");
+            pr.Inlines.Add("a.smith@solarwinds.com\r\n");
+            pr.Inlines.Add("noreply@t.tiki.vn\r\n");
+            pr.Inlines.Add("123.234.edc.asdf@google-mail.fake-address.com-fuking\r\n");
+            pr.Inlines.Add("12@gmail.com\r\n");
+            pr.Inlines.Add("123..456..abc@gmail.com\r\n");
+            pr.Inlines.Add("nabc.def.@gmail.com\r\n");
+            pr.Inlines.Add("thiisalongnamewithmorethan30characters@gmail.com\r\n");
+            pr.Inlines.Add("02053787774\r\n02053.123.456\r\n+84946157234\r\n09861452563\r\n0975-631-366\r\n" +
                 "192.168.1.1\r\n8.8.8.8 8.8.4.4\r\n2001:4860:4860::8888 2001:4860:4860::8844\r\n" +
                 "2001:4860:4860:0:0:0:0:8888 2001:4860:4860:0:0:0:0:8844\r\n2001:4860:4860:0000:0000:0000:0000:8888 2001:4860:4860:0000:0000:0000:0000:8844\r\n" +
                 "1.1.1.1\r\n\r\n203.162.4.191 203.162.4.190\r\n\r\n203.113.131.1 203.113.131.2\r\n\r\n" +
@@ -55,7 +60,9 @@ namespace RegexChecking
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             if (txbPattern.Text.Length == 0) return;
-            ObjRegex = new Regex(txbPattern.Text,
+            try
+            {
+                ObjRegex = new Regex(txbPattern.Text,
                 RegexOptions.None |
                 ((bool)ckbCompiled.IsChecked ? RegexOptions.Compiled : RegexOptions.None) |
                 ((bool)ckbCultureInvariant.IsChecked ? RegexOptions.CultureInvariant : RegexOptions.None) |
@@ -67,6 +74,14 @@ namespace RegexChecking
                 ((bool)ckbRightToLeft.IsChecked ? RegexOptions.RightToLeft : RegexOptions.None) |
                 ((bool)ckbSingleline.IsChecked ? RegexOptions.Singleline : RegexOptions.None)
             );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Pattern Error!", MessageBoxButton.OK, MessageBoxImage.Error );
+                txbPattern.Dispatcher.BeginInvoke((Action)(() => txbPattern.SelectAll()));
+                return;
+            }
+            
 
             MatchesResult.Clear();
             TextRange content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
@@ -125,24 +140,59 @@ namespace RegexChecking
                     };
                     ni.SubItems.Add(sni);
                 }
+
                 MatchesResult.Add(ni);
-                if (ni.Length > 0)
-                {
-                    var start = txbContent.Document.ContentStart;
-                    var startPos = start.GetPositionAtOffset(0);
-                    var endPos = start.GetPositionAtOffset(31);
-                    content.Select(startPos, endPos);
-                    content.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(Colors.OrangeRed));
-                    content.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Medium);
-                }
+                RichTextBoxMark(txbContent, ni.Index, ni.Length);
             }
 
+        }
+
+        private void RichTextBoxMark(RichTextBox txbContent, int index, int length)
+        {
+            var start = txbContent.Document.ContentStart;
+            TextRange content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
+            content.Select(GetPos(content, index), GetPos(content,index + length));
+            content.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(Colors.OrangeRed));
+            content.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Medium);
+
+        }
+
+        private TextPointer GetPos(TextRange content ,int index)
+        {
+            int i = 0;
+            var pos = content.Start;
+            while (i < index)
+            {
+                if (pos.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.None ||
+                    pos.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
+                {
+                    i++;
+                }
+                if (pos.GetPositionAtOffset(1,LogicalDirection.Forward) == null) //at end of document
+                {
+                    return pos;
+                }
+                pos = pos.GetPositionAtOffset(1, LogicalDirection.Forward);
+            }
+
+            return pos;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
             e.Handled = false;
+        }
+
+        private void trvResult_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            NodeInfor ni = e.NewValue as NodeInfor;
+            if (ni != null)
+            {
+                var content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
+                content.ClearAllProperties();
+                RichTextBoxMark(txbContent, ni.Index, ni.Length);
+            }
         }
     }
 }
