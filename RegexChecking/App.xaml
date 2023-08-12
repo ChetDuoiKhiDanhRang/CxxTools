@@ -13,7 +13,7 @@
             <Style x:Key="RoundedBorderGreen" TargetType="Border">
                 <Setter Property="CornerRadius" Value="3"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Background" Value="#0CDA79"/>
+                <Setter Property="Background" Value="LightSeaGreen"/>
             </Style>
             <BitmapImage x:Key="search" UriSource="/imgs/search.png"/>
         </ResourceDictionary>

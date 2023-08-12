@@ -35,32 +35,34 @@
             Grid.Column="0" Grid.Row="0">
             <DockPanel>
                 <Border DockPanel.Dock="Top" Style="{StaticResource RoundedBorderBlue}">
-                    <DockPanel Margin="0,0,0,5">
+                    <DockPanel Margin="0,0,0,0">
                         <Label 
                             Margin="5,3,0,3"
                             DockPanel.Dock="Left"
                             Content="Pattern: " 
                             VerticalContentAlignment="Center"
                             Foreground="#FBFBFB"
-                            />
-                        <Button
-                            x:Name="btnSearch"
-                            DockPanel.Dock="Right"
                             BorderThickness="0"
-                            Margin="5,3,5,3"
+                            />
+                        <!--<Button
+                            x:Name="btnSearch"
+                            BorderThickness="0"
                             Background="#00000000"
                             VerticalContentAlignment="Center"
                             IsDefault="True"
-                            Click="btnSearch_Click">
-                            <Image
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Width="20"
-                                Height="20"
-                                Source="{StaticResource search}"
-                                Stretch="Uniform"
-                                />
-                        </Button>
+                        >-->
+                        <Image
+                            VerticalAlignment="Center"
+                            Margin="5,3,5,3"
+                            DockPanel.Dock="Right"
+                            HorizontalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            Source="{StaticResource search}"
+                            Stretch="Uniform"
+                            MouseDown="btnSearch_Click"
+                            />
+                        <!--</Button>-->
                         <TextBox
                             x:Name="txbPattern"
                             VerticalContentAlignment="Center"
@@ -73,7 +75,7 @@
                     </DockPanel>
                 </Border>
                 <WrapPanel
-                    Margin="0,5,0,0"
+                    Margin="0,8,0,0"
                     Orientation="Vertical"
                     VerticalAlignment="Stretch"
                     >
@@ -187,16 +189,29 @@
                             ItemsSource="{x:Static Fonts.SystemFontFamilies}"/>
                     </DockPanel>
                 </Border>
-                <RichTextBox
-                    x:Name="txbContent"
-                    Margin="0,5,0,0"
+                <ScrollViewer
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto"
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch"
-                    BorderBrush="DarkGreen"
-                    FontFamily="{Binding ElementName=cmbFont, Path=SelectedItem}"
-                    AcceptsTab="True"
-                    AcceptsReturn="True"
-                    />
+                    Margin="0,5,0,0"
+                    >
+                    <StackPanel 
+                        Orientation="Vertical" 
+                        HorizontalAlignment="Stretch"
+                        >
+                        <RichTextBox
+                        x:Name="txbContent"
+                        BorderBrush="DarkGreen"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Margin="0"
+                        FontFamily="{Binding ElementName=cmbFont, Path=SelectedItem}"
+                        AcceptsTab="True"
+                        AcceptsReturn="True"
+                        />
+                    </StackPanel>
+                </ScrollViewer>
             </DockPanel>
         </Grid>
         <!--<StatusBar 

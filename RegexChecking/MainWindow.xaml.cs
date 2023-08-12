@@ -54,10 +54,63 @@ namespace RegexChecking
             fd.Blocks.Add(pr);
             txbContent.Document = fd;
         }
-        public Regex ObjRegex { get; set; }
+        public Regex? ObjRegex { get; set; }
         public ObservableCollection<NodeInfor> MatchesResult { get; set; } = new();
 
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        private void RichTextBoxMark(RichTextBox txbContent, int index, int length, Color foreGround, Color background)
+        {
+            var start = txbContent.Document.ContentStart;
+            TextRange content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
+            content.Select(GetPos(content, index), GetPos(content, index + length));
+            content.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(foreGround));
+            content.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Medium);
+            content.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(background));
+        }
+
+        private TextPointer GetPos(TextRange content, int index)
+        {
+            int i = 0;
+            var pos = content.Start;
+            while (i < index)
+            {
+                if (pos.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.None ||
+                    pos.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
+                {
+                    i++;
+                }
+                if (pos.GetPositionAtOffset(1, LogicalDirection.Forward) == null) //at end of document
+                {
+                    return pos;
+                }
+                pos = pos.GetPositionAtOffset(1, LogicalDirection.Forward);
+            }
+
+            return pos;
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+
+            }
+            e.Handled = false;
+        }
+
+        private void trvResult_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            NodeInfor? ni = e.NewValue as NodeInfor;
+            if (ni != null)
+            {
+                var content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
+                content.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)));
+                //content.ClearAllProperties();
+                RichTextBoxMark(txbContent, ni.Index, ni.Length, Colors.OrangeRed, Colors.LightSeaGreen);
+            }
+        }
+
+        private void btnSearch_Click(object sender, MouseButtonEventArgs e)
         {
             if (txbPattern.Text.Length == 0) return;
             try
@@ -77,11 +130,11 @@ namespace RegexChecking
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Pattern Error!", MessageBoxButton.OK, MessageBoxImage.Error );
+                MessageBox.Show(ex.Message, "Pattern Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 txbPattern.Dispatcher.BeginInvoke((Action)(() => txbPattern.SelectAll()));
                 return;
             }
-            
+
 
             MatchesResult.Clear();
             TextRange content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
@@ -92,9 +145,10 @@ namespace RegexChecking
 
             foreach (Match item in ObjRegex.Matches(content.Text))
             {
+
                 NodeInfor ni = new NodeInfor()
                 {
-                    Info1 = "[M]",
+                    Info1 = "[M]" + item.Name,
                     Info2 = "Value: " + item.Value,
                     Info3 = "Index: " + item.Index,
                     Info4 = "Length: " + item.Length,
@@ -121,7 +175,9 @@ namespace RegexChecking
                             Info1 = "[C]",
                             Info2 = "Value: " + cp.Value,
                             Info3 = "Index: " + cp.Index,
-                            Info4 = "Length: " + cp.Length
+                            Info4 = "Length: " + cp.Length,
+                            Index = cp.Index,
+                            Length = cp.Length
                         };
                         sni.SubItems.Add(ssni);
                     }
@@ -136,62 +192,15 @@ namespace RegexChecking
                         Info1 = "[C]",
                         Info2 = "Value: " + cp.Value,
                         Info3 = "Index: " + cp.Index,
-                        Info4 = "Length: " + cp.Length
+                        Info4 = "Length: " + cp.Length,
+                        Index = cp.Index,
+                        Length = cp.Length
                     };
                     ni.SubItems.Add(sni);
                 }
 
                 MatchesResult.Add(ni);
-                RichTextBoxMark(txbContent, ni.Index, ni.Length);
-            }
-
-        }
-
-        private void RichTextBoxMark(RichTextBox txbContent, int index, int length)
-        {
-            var start = txbContent.Document.ContentStart;
-            TextRange content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
-            content.Select(GetPos(content, index), GetPos(content,index + length));
-            content.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(Colors.OrangeRed));
-            content.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Medium);
-
-        }
-
-        private TextPointer GetPos(TextRange content ,int index)
-        {
-            int i = 0;
-            var pos = content.Start;
-            while (i < index)
-            {
-                if (pos.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.None ||
-                    pos.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
-                {
-                    i++;
-                }
-                if (pos.GetPositionAtOffset(1,LogicalDirection.Forward) == null) //at end of document
-                {
-                    return pos;
-                }
-                pos = pos.GetPositionAtOffset(1, LogicalDirection.Forward);
-            }
-
-            return pos;
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.DragMove();
-            e.Handled = false;
-        }
-
-        private void trvResult_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            NodeInfor ni = e.NewValue as NodeInfor;
-            if (ni != null)
-            {
-                var content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
-                content.ClearAllProperties();
-                RichTextBoxMark(txbContent, ni.Index, ni.Length);
+                RichTextBoxMark(txbContent, ni.Index, ni.Length, Colors.OrangeRed, Color.FromArgb(0, 0, 0, 0));
             }
         }
     }
