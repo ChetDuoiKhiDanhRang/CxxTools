@@ -16,6 +16,7 @@
                 <Setter Property="Background" Value="LightSeaGreen"/>
             </Style>
             <BitmapImage x:Key="search" UriSource="/imgs/search.png"/>
+            <BitmapImage x:Key="windowIcon" UriSource="/imgs/icon_24.png"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

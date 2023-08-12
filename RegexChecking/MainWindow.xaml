@@ -8,6 +8,7 @@
         Title="Regex Checking" Height="650" Width="1024"
         FontFamily="Segoe UI" FontSize="13"
         MouseDown="Window_MouseDown"
+        Icon="{StaticResource windowIcon}"
         >
     <Grid>
         <Grid.ColumnDefinitions>
