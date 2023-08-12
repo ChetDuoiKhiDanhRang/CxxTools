@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RegexChecking"
         mc:Ignorable="d"
-        Title="Regex Checking" Height="450" Width="800"
+        Title="Regex Checking" Height="650" Width="1024"
         FontFamily="Segoe UI" FontSize="13"
         MouseDown="Window_MouseDown"
         >
@@ -16,7 +16,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="155"></RowDefinition>
+            <RowDefinition Height="135"></RowDefinition>
             <RowDefinition Height="1"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
@@ -35,7 +35,7 @@
             Grid.Column="0" Grid.Row="0">
             <DockPanel>
                 <Border DockPanel.Dock="Top" Style="{StaticResource RoundedBorderBlue}">
-                    <DockPanel>
+                    <DockPanel Margin="0,0,0,5">
                         <Label 
                             Margin="5,3,0,3"
                             DockPanel.Dock="Left"
@@ -68,7 +68,7 @@
                             BorderThickness="0"
                             Foreground="#FBFBFB"
                             Margin="0,3,0,3"
-                            Text="fdsfdsgdsfgf"
+                            Text="(\w{1,2}(\.?\w+)+)@((\w+\-?\w*)(\.(\w+\-?\w+))+)"
                             />
                     </DockPanel>
                 </Border>
@@ -83,49 +83,49 @@
                         IsChecked="True"
                         Foreground="#005A9E"
                         FontWeight="Medium"
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbMultiline"
                         Content="Multiline"
                         Foreground="#005A9E"
                         FontWeight="Medium"                        
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbExplicitCapture"
                         Content="Explicit Capture"
                         Foreground="#005A9E"
                         FontWeight="Medium"
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbCompiled"
                         Content="Compiled"
                         Foreground="#005A9E"
                         FontWeight="Medium"
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbSingleline"
                         Content="Singleline"
                         Foreground="#005A9E"
                         FontWeight="Medium"
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbIgnorePatternWhitespace"
                         Content="Ignore Pattern Whitespace"
                         Foreground="#005A9E"
                         FontWeight="Medium"
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbRightToLeft"
                         Content="Right To Left"
                         Foreground="#005A9E"
                         FontWeight="Medium"
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbECMAScript"
                         Content="ECMA Script"
                         Foreground="#005A9E"
                         FontWeight="Medium"
-                        Margin="0,0,5,5"/>
+                        Margin="0,0,5,8"/>
                     <CheckBox
                         x:Name="ckbCultureInvariant"
                         Content="Culture Invariant"
@@ -145,8 +145,22 @@
                 HorizontalAlignment="Stretch"
                 x:Name="trvResult"
                 Foreground="#005A9E"
-                FontWeight="Medium"
                 >
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate 
+                        DataType="{x:Type local:NodeInfor}"
+                        ItemsSource="{Binding SubItems}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Info1}"/>
+                            <TextBlock Text=" - "/>
+                            <TextBlock Text="{Binding Info2}"/>
+                            <TextBlock Text=" - "/>
+                            <TextBlock Text="{Binding Info3}"/>
+                            <TextBlock Text=" - "/>
+                            <TextBlock Text="{Binding Info4}"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
             </TreeView>
         </Border>
         <Grid
@@ -172,7 +186,7 @@
                             ItemsSource="{x:Static Fonts.SystemFontFamilies}"/>
                     </DockPanel>
                 </Border>
-                <TextBox
+                <RichTextBox
                     x:Name="txbContent"
                     Margin="0,5,0,0"
                     VerticalAlignment="Stretch"
@@ -181,10 +195,10 @@
                     FontFamily="{Binding ElementName=cmbFont, Path=SelectedItem}"
                     AcceptsTab="True"
                     AcceptsReturn="True"
-                    TextWrapping="Wrap"
+                    
                     >
 
-                </TextBox>
+                </RichTextBox>
                 
             </DockPanel>
 
