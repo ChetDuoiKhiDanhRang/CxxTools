@@ -5,7 +5,9 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptString", "EncryptString\EncryptString.csproj", "{BB57BC60-DC87-4AD6-B96E-CBF474682085}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexChecking", "RegexChecking\RegexChecking.csproj", "{113DC5BE-C6BC-453B-9B2F-8BCB56D9B209}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegexChecking", "RegexChecking\RegexChecking.csproj", "{113DC5BE-C6BC-453B-9B2F-8BCB56D9B209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnviromentVariables", "EnviromentVariables\EnviromentVariables.csproj", "{6A534D32-F733-4F15-A0EC-FBBE57F411A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,22 @@ Global
 		{113DC5BE-C6BC-453B-9B2F-8BCB56D9B209}.Release|x64.Build.0 = Release|Any CPU
 		{113DC5BE-C6BC-453B-9B2F-8BCB56D9B209}.Release|x86.ActiveCfg = Release|Any CPU
 		{113DC5BE-C6BC-453B-9B2F-8BCB56D9B209}.Release|x86.Build.0 = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|x64.Build.0 = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Debug|x86.Build.0 = Debug|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|ARM64.Build.0 = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|x64.ActiveCfg = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|x64.Build.0 = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|x86.ActiveCfg = Release|Any CPU
+		{6A534D32-F733-4F15-A0EC-FBBE57F411A6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
