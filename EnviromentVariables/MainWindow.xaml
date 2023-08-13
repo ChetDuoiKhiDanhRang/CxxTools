@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EnviromentVariables"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        FontFamily="Bahnschrift SemiLight"
+        Title="Enviroment" Height="450" Width="800"
+        FontFamily="Bahnschrift"
         >
     <Window.Resources>
 
@@ -35,7 +35,7 @@
         </Style>
 
         <Style TargetType="DataGridCell">
-            <Setter Property="Foreground" Value="#005A9E"/>
+            <Setter Property="Foreground" Value="#001A30"/>
             <Setter Property="FontWeight" Value="Medium"/>
         </Style>
 
@@ -43,6 +43,7 @@
         <Style TargetType="DataGrid">
             <Setter Property="Background" Value="#00000000"/>
         </Style>
+
     </Window.Resources>
     <Grid>
         <Border
@@ -67,8 +68,9 @@
                 AutoGenerateColumns="False"
                 SelectionMode="Extended" AlternationCount="1"
                 >
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Key}">
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
                                 <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
@@ -77,7 +79,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}">
+                    <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Content}">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
                                 <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
@@ -87,6 +89,30 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
+                <DataGrid.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="GroupItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="GroupItem">
+                                            <Expander IsExpanded="True">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock Text="{Binding Path=DataType}" Foreground="Red"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <Expander.Content>
+                                                    <ItemsPresenter/>
+                                                </Expander.Content>
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
             </DataGrid>
 
         </Border>
