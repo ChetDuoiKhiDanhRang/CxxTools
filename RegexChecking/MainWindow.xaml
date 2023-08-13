@@ -70,6 +70,7 @@
                             Background="#0000"
                             BorderThickness="0"
                             Foreground="#FBFBFB"
+                            SelectionBrush="LightSeaGreen"
                             Margin="0,3,0,3"
                             Text="(\w{1,2}(\.?\w+)+)@((\w+\-?\w*)(\.(\w+\-?\w+))+)"
                             />
@@ -197,10 +198,10 @@
                     HorizontalAlignment="Stretch"
                     Margin="0,5,0,0"
                     >
-                    <StackPanel 
+                    <!--<StackPanel 
                         Orientation="Vertical" 
                         HorizontalAlignment="Stretch"
-                        >
+                        >-->
                         <RichTextBox
                         x:Name="txbContent"
                         BorderBrush="DarkGreen"
@@ -211,7 +212,7 @@
                         AcceptsTab="True"
                         AcceptsReturn="True"
                         />
-                    </StackPanel>
+                    <!--</StackPanel>-->
                 </ScrollViewer>
             </DockPanel>
         </Grid>

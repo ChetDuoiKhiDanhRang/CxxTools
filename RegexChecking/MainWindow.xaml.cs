@@ -131,7 +131,11 @@ namespace RegexChecking
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Pattern Error!", MessageBoxButton.OK, MessageBoxImage.Error);
-                txbPattern.Dispatcher.BeginInvoke((Action)(() => txbPattern.SelectAll()));
+                txbPattern.Dispatcher.BeginInvoke((Action)(() => {
+                    txbPattern.Focus();
+                    txbPattern.SelectAll();
+                }
+                )) ;
                 return;
             }
 
