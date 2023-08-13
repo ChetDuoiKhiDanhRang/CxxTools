@@ -69,7 +69,7 @@
                             VerticalContentAlignment="Center"
                             Background="#0000"
                             BorderThickness="0"
-                            Foreground="#FBFBFB"
+                            Foreground="Yellow"
                             SelectionBrush="LightSeaGreen"
                             Margin="0,3,0,3"
                             Text="(\w{1,2}(\.?\w+)+)@((\w+\-?\w*)(\.(\w+\-?\w+))+)"

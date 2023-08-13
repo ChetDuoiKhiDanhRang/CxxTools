@@ -106,7 +106,7 @@ namespace RegexChecking
                 var content = new TextRange(txbContent.Document.ContentStart, txbContent.Document.ContentEnd);
                 content.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)));
                 //content.ClearAllProperties();
-                RichTextBoxMark(txbContent, ni.Index, ni.Length, Colors.OrangeRed, Colors.LightSeaGreen);
+                RichTextBoxMark(txbContent, ni.Index, ni.Length, Colors.OrangeRed, Color.FromArgb(180,0,0,0));
             }
         }
 
