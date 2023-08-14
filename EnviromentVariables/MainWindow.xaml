@@ -10,7 +10,7 @@
         >
     <Window.Resources>
 
-        <Style TargetType="DataGridColumnHeader">
+        <!--<Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#00000000"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="BorderBrush" Value="#222222"/>
@@ -21,12 +21,12 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
 
-        <!--Hide the row header-->
+        --><!--Hide the row header--><!--
         <Style TargetType="DataGridRowHeader">
             <Setter Property="Width" Value="0"/>
         </Style>
 
-        <!--Hide the row's border and trans[arent background, use GridLine of DataGrid-->
+        --><!--Hide the row's border and trans[arent background, use GridLine of DataGrid--><!--
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#0000"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -42,7 +42,7 @@
 
         <Style TargetType="DataGrid">
             <Setter Property="Background" Value="#00000000"/>
-        </Style>
+        </Style>-->
 
     </Window.Resources>
     <Grid>
@@ -59,61 +59,86 @@
                     <GradientStop Color="#AA139663" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
-            <DataGrid 
-                x:Name="datagrid"
-                IsReadOnly="True"
+            <ListView 
+                x:Name="dataView"
+                Background="#0000"
+                BorderThickness="0"
+                Margin="5"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                GridLinesVisibility="Horizontal"
-                HorizontalGridLinesBrush="#222222"
-                AutoGenerateColumns="False"
                 SelectionMode="Extended" AlternationCount="1"
                 >
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn Header="Name" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Background="#0000"
+                                            Margin="2,3,2,3" 
+                                            HorizontalAlignment="Stretch"
+                                            TextWrapping="Wrap" 
+                                            Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Value">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Background="#0000"
+                                            Margin="2,3,2,3" 
+                                            HorizontalAlignment="Stretch"
+                                            TextWrapping="Wrap" 
+                                            Text="{Binding Content}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style>
-                                <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
-                                <Setter Property="TextBlock.Background" Value="#0000"/>
-                                <Setter Property="TextBlock.Padding" Value="3"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Content}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style>
-                                <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
-                                <Setter Property="TextBlock.Background" Value="#0000"/>
-                                <Setter Property="TextBlock.Padding" Value="3"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-                <DataGrid.GroupStyle>
+                <!--<ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>-->
+                
+                <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.ContainerStyle>
                             <Style TargetType="GroupItem">
                                 <Setter Property="Template">
                                     <Setter.Value>
-                                        <ControlTemplate TargetType="GroupItem">
-                                            <Expander IsExpanded="True">
+                                        <ControlTemplate>
+                                            <Expander>
                                                 <Expander.Header>
-                                                    <DockPanel>
-                                                        <TextBlock Text="{Binding Path=DataType}" Foreground="Red"/>
-                                                    </DockPanel>
+                                                    <StackPanel 
+                                                        Margin="2"
+                                                        Orientation="Horizontal">
+                                                        <Label 
+                                                            FontWeight="Medium"
+                                                            Foreground="DarkRed"
+                                                            Margin="3,2,3,2"
+                                                            Content="{Binding BindingGroupName=EnvType}"/>
+                                                        <Label
+                                                            FontWeight="Medium"
+                                                            Margin="3,2,3,2"
+                                                            Content="{Binding ItemCount}"/>
+                                                    </StackPanel>
                                                 </Expander.Header>
-                                                <Expander.Content>
-                                                    <ItemsPresenter/>
-                                                </Expander.Content>
+                                                <ItemsPresenter/>
                                             </Expander>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
                             </Style>
                         </GroupStyle.ContainerStyle>
+
                     </GroupStyle>
-                </DataGrid.GroupStyle>
-            </DataGrid>
+                </ListView.GroupStyle>
+            </ListView>
 
         </Border>
     </Grid>

@@ -4,6 +4,8 @@
     {
         public string Name { get; set; }
         public string Content { get; set; }
-        public string DataType { get; set; }
+        public string EnvType { get; set; }
+
+        public string cxx { get; set; }
     }
 }

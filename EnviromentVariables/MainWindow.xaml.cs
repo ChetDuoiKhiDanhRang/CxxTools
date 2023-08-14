@@ -30,22 +30,21 @@ namespace EnviromentVariables
             foreach (var variable in variables)
             {
                 DictionaryEntry entry = (DictionaryEntry)variable;
-                itemsSource.Add(new DataItem() { Name = (string)entry.Key, Content = (string)entry.Value, DataType="Enviroment Variable" });
+                itemsSource.Add(new DataItem() { Name = (string)entry.Key, Content = (string)entry.Value, EnvType = "Enviroment Variable"});
             }
 
-            var specicalFolder = Enum.GetValues(typeof(SpecialFolder)).Cast<SpecialFolder>().ToList();
-            foreach (var specical in specicalFolder)
+            var specicalFolders = Enum.GetValues(typeof(SpecialFolder)).Cast<SpecialFolder>().ToList();
+            foreach (var folder in specicalFolders)
             {
-                string x = Environment.GetFolderPath(specical);
-                itemsSource.Add(new DataItem() { Name = specical.ToString(), Content=x, DataType="Enviroment Special Folder" });
+                string x = Environment.GetFolderPath(folder);
+                itemsSource.Add(new DataItem() { Name = folder.ToString(), Content=x, EnvType = "Special Folder"});
             }
 
-            datagrid.ItemsSource = itemsSource;
+            dataView.ItemsSource = itemsSource;
 
-            CollectionView collectionView = (CollectionView)CollectionViewSource.GetDefaultView(datagrid.ItemsSource);
-            PropertyGroupDescription propertyGroupDescription = new PropertyGroupDescription("DataType");
+            CollectionView collectionView = (CollectionView)CollectionViewSource.GetDefaultView(dataView.ItemsSource);
+            PropertyGroupDescription propertyGroupDescription = new PropertyGroupDescription(nameof(DataItem.EnvType));
             collectionView.GroupDescriptions.Add(propertyGroupDescription);
-
 
         }
 
