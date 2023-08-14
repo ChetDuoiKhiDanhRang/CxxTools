@@ -61,6 +61,15 @@ namespace EnviromentVariables
 
         private void txbFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (txbFilter.Text.IndexOf("Nguyễn Ngọc Cường", StringComparison.OrdinalIgnoreCase) >=0)
+            {
+                Random rd = new Random();
+                MessageBox.Show("Lucky number: " + rd.Next(0, 99), "LUCKY NUMBER!!!", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
             if (dataView == null || dataView.ItemsSource == null)
             {
                 return;

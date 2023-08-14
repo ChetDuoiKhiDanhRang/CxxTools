@@ -8,6 +8,7 @@
         Title="Enviroment variables" Height="600" Width="800"
         WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI"
+        FontSize="13"
         Icon="{StaticResource windowsIcon}"
         >
     <Window.Resources>
@@ -48,16 +49,29 @@
             BorderThickness="1"
             BorderBrush="#222222" DockPanel.Dock="Top">
             <Border.Background>
-                <RadialGradientBrush GradientOrigin="0.2,0.2">
+                <RadialGradientBrush GradientOrigin="0,0">
                     <GradientStop Color="#A9FDEE" Offset="0"/>
                     <GradientStop Color="#AA139663" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
-            <DockPanel >
-                <Label FontWeight="Medium" DockPanel.Dock="Left" Content="Filter: ">
-                </Label>
+            <DockPanel Margin="0,5,0,5">
+                <Button
+                    Margin="2"
+                    Background="#0000"
+                    BorderThickness="0"
+                    IsDefault="True"
+                    FontWeight="Medium" 
+                    DockPanel.Dock="Left" 
+                    Content="Filter: "
+                    Click="Button_Click"
+                    >
+                    <Button.ToolTip>
+                        <TextBlock Text="Input string and pess Enter to filter"/>
+                    </Button.ToolTip>
+                </Button>
                 <TextBox
-                    x:Name="txbFilter" Text="" Margin="2"
+                    x:Name="txbFilter" Text=""
+                    FontWeight="Medium"
                     Background="#00FFFFFF"
                     BorderThickness="0"
                     TextChanged="txbFilter_TextChanged"
