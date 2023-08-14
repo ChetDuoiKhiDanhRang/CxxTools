@@ -45,9 +45,27 @@ namespace EnviromentVariables
             CollectionView collectionView = (CollectionView)CollectionViewSource.GetDefaultView(dataView.ItemsSource);
             PropertyGroupDescription propertyGroupDescription = new PropertyGroupDescription(nameof(DataItem.EnvType));
             collectionView.GroupDescriptions.Add(propertyGroupDescription);
+            collectionView.Filter = DataItemFilter;
+        }
+
+        private bool DataItemFilter(object obj)
+        {
+            if (txbFilter.Text.Length == 0) return true;
+            var di = (DataItem)obj;
+            return (di.Name.IndexOf(txbFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0) || 
+                (di.Content.IndexOf(txbFilter.Text, StringComparison.OrdinalIgnoreCase) >=0);
 
         }
 
         public ObservableCollection<DataItem> itemsSource { get; set; } = new();
+
+        private void txbFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (dataView == null || dataView.ItemsSource == null)
+            {
+                return;
+            }
+            CollectionViewSource.GetDefaultView(dataView.ItemsSource).Refresh();
+        }
     }
 }

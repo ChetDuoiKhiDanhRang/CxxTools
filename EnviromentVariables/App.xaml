@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:EnviromentVariables"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <BitmapImage UriSource="/imgs/icon.png" x:Key="windowsIcon"/>
     </Application.Resources>
 </Application>

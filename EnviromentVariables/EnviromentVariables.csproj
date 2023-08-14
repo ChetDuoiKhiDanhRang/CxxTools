@@ -5,6 +5,21 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>imgs\app.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="imgs\app.ico" />
+    <None Remove="imgs\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="imgs\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="imgs\app.ico" />
+    <Resource Include="imgs\icon.png" />
+  </ItemGroup>
 
 </Project>
