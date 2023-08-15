@@ -88,7 +88,8 @@
                 <RadialGradientBrush 
                     GradientOrigin="0,0" 
                     >
-                    <GradientStop Color="#A9FDEE" Offset="0"/>
+                    <GradientStop Color="#AA139663" Offset="0"/>
+                    <GradientStop Color="#EEA9FDEE" Offset=".5"/>
                     <GradientStop Color="#AA139663" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
@@ -111,7 +112,7 @@
                 AutoGenerateColumns="False"
                 
                 GridLinesVisibility="Horizontal"
-                HorizontalGridLinesBrush="#AA222222"
+                HorizontalGridLinesBrush="#aaaaaa"
                 >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}">
