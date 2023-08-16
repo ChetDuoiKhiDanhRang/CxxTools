@@ -14,17 +14,18 @@
     <None Remove="imgs\icon_24.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CxxBaseTools">
+      <HintPath>..\..\CxxLibs\CxxBaseTools\bin\Debug\net6.0\CxxBaseTools.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
   <!--<ItemGroup>
     <None Remove="imgs\app.ico" />
     <None Remove="imgs\LeftAr_24.png" />
     <None Remove="imgs\RightAr_24.png" />
   </ItemGroup>-->
-
-  <ItemGroup>
-    <Reference Include="CxxBaseTools">
-      <HintPath>..\..\CxxLibs\CxxBaseTools\bin\Debug\net6.0\CxxBaseTools.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
     <Resource Include="imgs\copy_24.png" />
