@@ -50,7 +50,8 @@
             BorderBrush="#222222" DockPanel.Dock="Top">
             <Border.Background>
                 <RadialGradientBrush GradientOrigin="0,0">
-                    <GradientStop Color="#A9FDEE" Offset="0"/>
+                    <GradientStop Color="#AA139663" Offset="0"/>
+                    <GradientStop Color="#EEA9FDEE" Offset=".5"/>
                     <GradientStop Color="#AA139663" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
