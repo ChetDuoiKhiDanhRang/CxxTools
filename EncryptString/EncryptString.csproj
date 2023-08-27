@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>imgs\app.ico</ApplicationIcon>
+    <AssemblyVersion>1.1</AssemblyVersion>
+    <FileVersion>1.1</FileVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,9 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CxxBaseTools">
-      <HintPath>..\..\CxxLibs\CxxBaseTools\bin\Debug\net6.0\CxxBaseTools.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="BaseTools">
+      <HintPath>..\..\CxxLibs\BaseTools\bin\Debug\netstandard2.1\BaseTools.dll</HintPath>
     </Reference>
   </ItemGroup>
 
