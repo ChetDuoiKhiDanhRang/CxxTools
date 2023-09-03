@@ -11,6 +11,9 @@
         FontSize="13"
         FontWeight="Medium"
         Loaded="Window_Loaded"
+        AllowDrop="True"
+        PreviewDragEnter="Window_DragEnter"
+        PreviewDrop="Window_Drop"
         >
     <Grid Margin="5">
         <Grid.RowDefinitions>
@@ -81,26 +84,32 @@
             </DockPanel>
         </Border>
 
-        <DockPanel 
+        <DockPanel
+            x:Name="dpOptions"
             Grid.Row="0"
             VerticalAlignment="Top"
-            Margin="0,70,0,0"
+            Margin="0,75,0,0"
             >
             <StackPanel DockPanel.Dock="Left">
                 <CheckBox x:Name="ckbRegex" Margin="0,4,0,0" Content="Use Regex string"/>
-                <CheckBox x:Name="ckbSensitive" Margin="0,6,0,0" Content="Sensitive case"/>
+                <CheckBox x:Name="ckbEntirePath" Margin="0,6,0,0" Content="Entire path"/>
                 <CheckBox x:Name="ckbTitleCase" Margin="0,6,0,0" Content="Title Case"/>
             </StackPanel>
             <StackPanel Margin="24,0,0,0">
                 <CheckBox x:Name="ckbExtension" Margin="0,4,0,0" Content="Include extension"/>
-                <CheckBox x:Name="ckbEntirePath" Margin="0,6,0,0" Content="Entire path"/>
+                <CheckBox x:Name="ckbIncludeChilds" Margin="0,6,0,0" Content="Include files and sub folders"/>
                 <CheckBox x:Name="ckbTVKhongDau" Margin="0,6,0,0">
                     <CheckBox.Content>
                         Có dấu ⇒ Khong dau
                     </CheckBox.Content>
                 </CheckBox>
-                
             </StackPanel>
+            <TextBox
+                x:Name="txbLog"
+                Margin="24,0,0,0"
+                IsReadOnly="True"
+                Background="#22000000"
+                />
         </DockPanel>
 
     </Grid>
