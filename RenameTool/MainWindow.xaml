@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="RenameTool" Height="450" Width="800"
         Icon="{StaticResource WindowsIcon}"
+        FontFamily="Segoe UI"
+        FontSize="13"
+        FontWeight="Medium"
         Loaded="Window_Loaded"
         >
     <Grid Margin="5">
@@ -22,12 +25,83 @@
             <GridSplitter.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="Transparent" Offset="0"/>
-                    <GradientStop Color="Black" Offset="0.5"/>
+                    <GradientStop Color="#005A9E" Offset="0.5"/>
                     <GradientStop Color="Transparent" Offset="1"/>
-
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
+        <Border
+            Grid.Row="0"
+            VerticalAlignment="Top"
+            Background="#005A9E"
+            BorderThickness="1"
+            CornerRadius="3"
+            >
+            <DockPanel LastChildFill="True">
+                <Label 
+                    DockPanel.Dock="Left"
+                    Content="Search:"
+                    Foreground="WhiteSmoke"
+                    Width="{Binding ElementName=lbl, Path=ActualWidth}"
+                />
+                <TextBox
+                    x:Name="tblkPattern"
+                    Margin="0,2,2,2"
+                    VerticalContentAlignment="Center"
+                    Foreground="WhiteSmoke"
+                    Background="#22000000"
+                    BorderBrush="Transparent"/>
+
+            </DockPanel>
+        </Border>
+
+        <Border
+            Grid.Row="0"
+            Margin="0,35,0,0"
+            VerticalAlignment="Top"
+            Background="#005A9E"
+            BorderThickness="1"
+            CornerRadius="3"
+            >
+            <DockPanel>
+                <Label 
+                    x:Name="lbl"
+                    DockPanel.Dock="Left"
+                    Content="Repalce with:"
+                    Foreground="WhiteSmoke"
+                />
+                <TextBox
+                    x:Name="tbRepalceWith"
+                    Margin="0,2,2,2"
+                    VerticalContentAlignment="Center"
+                    Foreground="WhiteSmoke"
+                    Background="#22000000"
+                    BorderBrush="Transparent"
+                    />
+            </DockPanel>
+        </Border>
+
+        <DockPanel 
+            Grid.Row="0"
+            VerticalAlignment="Top"
+            Margin="0,70,0,0"
+            >
+            <StackPanel DockPanel.Dock="Left">
+                <CheckBox x:Name="ckbRegex" Margin="0,4,0,0" Content="Use Regex string"/>
+                <CheckBox x:Name="ckbSensitive" Margin="0,6,0,0" Content="Sensitive case"/>
+                <CheckBox x:Name="ckbTitleCase" Margin="0,6,0,0" Content="Title Case"/>
+            </StackPanel>
+            <StackPanel Margin="24,0,0,0">
+                <CheckBox x:Name="ckbExtension" Margin="0,4,0,0" Content="Include extension"/>
+                <CheckBox x:Name="ckbEntirePath" Margin="0,6,0,0" Content="Entire path"/>
+                <CheckBox x:Name="ckbTVKhongDau" Margin="0,6,0,0">
+                    <CheckBox.Content>
+                        Có dấu ⇒ Khong dau
+                    </CheckBox.Content>
+                </CheckBox>
+                
+            </StackPanel>
+        </DockPanel>
 
     </Grid>
 </Window>
