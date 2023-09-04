@@ -112,5 +112,12 @@
                 />
         </DockPanel>
 
+        <ListView 
+            x:Name="lscItems"
+            Grid.Row="2"
+            >
+            
+        </ListView>
+
     </Grid>
 </Window>

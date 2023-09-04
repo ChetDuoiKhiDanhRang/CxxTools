@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,15 +32,15 @@ namespace RenameTool
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Items = new Dictionary<string, string>();
+            Items = new Dictionary<string, FileInfo>();
             dpOptions.DataContext = this;
         }
 
-        Dictionary<string, string> _items;
+        Dictionary<string, FileInfo> _items;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Dictionary<string, string> Items
+        public Dictionary<string, FileInfo> Items
         {
             get => _items;
             set
@@ -48,6 +49,76 @@ namespace RenameTool
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
             }
         }
+
+        public bool UseRegex 
+        { 
+            get => useRegex; 
+            set
+            {
+                useRegex = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UseRegex)));
+            }
+        }
+
+        public bool EntirePath
+        {
+            get => entirePath;
+            set
+            {
+                entirePath = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EntirePath)));
+            }
+        }
+
+        public bool TitleCase
+        {
+            get => titleCase;
+            set
+            {
+                titleCase = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TitleCase)));
+            }
+        }
+
+        public bool IncludeExtension 
+        { 
+            get => includeExtension;
+            set
+            {
+                includeExtension = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeExtension)));
+            }
+        }
+        public bool IncludeFilesAndSubFolders 
+        { 
+            get => includeFilesAndSubFolders;
+            set
+            {
+                includeFilesAndSubFolders = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeFilesAndSubFolders)));
+            }
+        }
+        public bool ToTiengVietKhongDau 
+        { 
+            get => toTiengVietKhongDau;
+            set
+            {
+                toTiengVietKhongDau = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToTiengVietKhongDau)));
+            }
+        }
+
+        bool useRegex;
+
+        bool entirePath;
+
+        bool titleCase;
+
+        bool includeExtension;
+
+        bool includeFilesAndSubFolders;
+
+        bool toTiengVietKhongDau;
 
 
 
@@ -59,7 +130,13 @@ namespace RenameTool
         private void Window_Drop(object sender, DragEventArgs e)
         {
             IEnumerable<string> files = (IEnumerable<string>)e.Data.GetData(DataFormats.FileDrop);
-            txbLog.Text = files.FirstOrDefault();
+            foreach (string file in files)
+            {
+                var fi = new FileInfo(file);
+                if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, new FileInfo(file));
+            }
+
+            lscItems.ItemsSource = Items;
         }
     }
 }
