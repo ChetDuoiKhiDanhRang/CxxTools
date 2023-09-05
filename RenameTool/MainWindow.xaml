@@ -116,7 +116,29 @@
             x:Name="lscItems"
             Grid.Row="2"
             >
-            
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="Renamed">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsHitTestVisible="False" Focusable="False" IsChecked="{Binding Value.Renamed}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Old name" DisplayMemberBinding="{Binding Key}"/>
+                        <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.Name}"/>
+
+
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
 
     </Grid>

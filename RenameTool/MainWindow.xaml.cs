@@ -32,15 +32,17 @@ namespace RenameTool
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Items = new Dictionary<string, FileInfo>();
+            Items = new Dictionary<string, ItemInfo>();
+            lscItems.ItemsSource = Items;
+
             dpOptions.DataContext = this;
         }
 
-        Dictionary<string, FileInfo> _items;
+        Dictionary<string, ItemInfo> _items;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Dictionary<string, FileInfo> Items
+        public Dictionary<string, ItemInfo> Items
         {
             get => _items;
             set
@@ -133,10 +135,8 @@ namespace RenameTool
             foreach (string file in files)
             {
                 var fi = new FileInfo(file);
-                if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, new FileInfo(file));
+                if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, new ItemInfo(fi));
             }
-
-            lscItems.ItemsSource = Items;
         }
     }
 }
