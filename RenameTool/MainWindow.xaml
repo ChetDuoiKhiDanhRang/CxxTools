@@ -17,7 +17,7 @@
         >
     <Grid Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="180"/>
+            <RowDefinition Height="160"/>
             <RowDefinition Height="1"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -114,12 +114,13 @@
 
         <ListView 
             x:Name="lscItems"
+            Margin="0,15,0,0"
             Grid.Row="2"
             >
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="Renamed">
+                        <GridViewColumn Header="..|.">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsHitTestVisible="False" Focusable="False" IsChecked="{Binding Value.Renamed}"/>

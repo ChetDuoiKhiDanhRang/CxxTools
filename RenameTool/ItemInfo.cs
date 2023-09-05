@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -8,25 +9,71 @@ using System.Threading.Tasks;
 
 namespace RenameTool
 {
-    public class ItemInfo
+    public class ItemInfo//: INotifyPropertyChanged
     {
-        public string Name { get; set; }
+        private string name;
+        public string Name
+        {
+            get => name;
+            set
+            {
+                name = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Name"));
+            }
+        }
 
-        public string FullName { get; set; }
+        private string fullName;
+        public string FullName
+        {
+            get => fullName;
+            set
+            {
+                fullName = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("FullName"));
+            }
+        }
 
-        public string NameWithoutExtension { get; set; }
+        private string nameWithoutExtension;
+        public string NameWithoutExtension
+        {
+            get => nameWithoutExtension;
+            set
+            {
+                nameWithoutExtension = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("NameWithoutExtension"));
+            }
+        }
 
-        public bool IsFile { get; set; }
+        private bool isFile;
+        public bool IsFile
+        {
+            get => isFile;
+            set
+            {
+                isFile = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("IsFile"));
+            }
+        }
 
-        public bool Exist { get; set; }
+        private bool existed;
+        public bool Existed { get => existed; set => existed = value; }
+
+        private bool renamed = false;
+        public bool Renamed { get => renamed; set => renamed = value; }
 
         private FileInfo FileInfo { get; set; }
 
         public ItemInfo? Parent { get; set; }
+        
         public string Extension { get; set; }
 
-        private bool renamed = false;
-        public bool Renamed { get => renamed; set => renamed = value; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+        {
+            PropertyChanged?.Invoke(this, eventArgs);
+        }
 
         public ItemInfo(FileInfo file)
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -137,6 +138,10 @@ namespace RenameTool
                 var fi = new FileInfo(file);
                 if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, new ItemInfo(fi));
             }
+
+            lscItems.ItemsSource = null;
+            lscItems.ItemsSource = Items;
+
         }
     }
 }
