@@ -45,7 +45,7 @@ namespace RenameTool
         private void LoadSettings()
         {
             UseRegex = Properties.Settings.Default.UseRegex;
-            RemoveJunkSpace = Properties.Settings.Default.RemoveJunkSpace;
+            CaseSensitive = Properties.Settings.Default.CaseSensitive;
             TitleCase = Properties.Settings.Default.TitleCase;
             IncludeExtension = Properties.Settings.Default.IncludeExtension;
             IncludeFilesAndSubFolders = Properties.Settings.Default.IncludeFilesAndSubFolders;
@@ -59,7 +59,7 @@ namespace RenameTool
         {
             var x = Properties.Settings.Default;
             x.UseRegex = UseRegex;
-            x.RemoveJunkSpace = RemoveJunkSpace;
+            x.CaseSensitive = CaseSensitive;
             x.TitleCase = TitleCase;
             x.IncludeExtension = IncludeExtension;
             x.IncludeFilesAndSubFolders = IncludeFilesAndSubFolders;
@@ -110,13 +110,13 @@ namespace RenameTool
             }
         }
 
-        public bool RemoveJunkSpace
+        public bool CaseSensitive
         {
-            get => removeJunkSpace;
+            get => caseSensitive;
             set
             {
-                removeJunkSpace = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemoveJunkSpace)));
+                caseSensitive = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CaseSensitive)));
             }
         }
 
@@ -168,7 +168,7 @@ namespace RenameTool
 
         private string replaceWith;
 
-        bool removeJunkSpace = true;
+        bool caseSensitive = true;
 
         bool titleCase = true;
 

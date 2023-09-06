@@ -101,10 +101,10 @@
                           Margin="0,4,0,0" 
                           IsChecked="{Binding UseRegex}"
                           Content="Use Regex string"/>
-                <CheckBox x:Name="ckbRemoveJunkSpace" 
-                          IsChecked="{Binding RemoveJunkSpace}"
+                <CheckBox x:Name="ckbCaseSensitive" 
+                          IsChecked="{Binding CaseSensitive}"
                           Margin="0,6,0,0" 
-                          Content="Remove junk space"/>
+                          Content="Case sensitive"/>
             </StackPanel>
             <StackPanel Margin="24,0,0,0">
                 <CheckBox 

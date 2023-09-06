@@ -38,7 +38,7 @@ namespace RenameTool.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool RemoveJunkSpace {
+        public bool CaseSensitive {
             get {
                 return ((bool)(this["RemoveJunkSpace"]));
             }
