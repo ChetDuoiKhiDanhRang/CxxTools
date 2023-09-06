@@ -14,6 +14,7 @@
         AllowDrop="True"
         PreviewDragEnter="Window_DragEnter"
         PreviewDrop="Window_Drop"
+        Closing="Window_Closing"
         >
     <Window.Resources>
         <ResourceDictionary>
@@ -53,8 +54,9 @@
                     Width="{Binding ElementName=lbl, Path=ActualWidth}"
                 />
                 <TextBox
-                    x:Name="tblkPattern"
-                    Margin="0,2,2,2"
+                    x:Name="txbPattern"
+                    Margin="0,1,1,1"
+                    Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
                     BorderBrush="Transparent"/>
@@ -78,8 +80,9 @@
                     Foreground="WhiteSmoke"
                 />
                 <TextBox
-                    x:Name="tbRepalceWith"
-                    Margin="0,2,2,2"
+                    x:Name="txbReplaceWith"
+                    Text="{Binding ReplaceWith, UpdateSourceTrigger=PropertyChanged}"
+                    Margin="0,1,1,1"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
                     BorderBrush="Transparent"
@@ -93,18 +96,38 @@
             VerticalAlignment="Top"
             Margin="0,75,0,0"
             >
-            <Image x:Name="aaa"/>
             <StackPanel DockPanel.Dock="Left">
-                <CheckBox x:Name="ckbRegex" Margin="0,4,0,0" Content="Use Regex string"/>
-                <CheckBox x:Name="ckbEntirePath" Margin="0,6,0,0" Content="Entire path"/>
+                <CheckBox x:Name="ckbRegex" 
+                          Margin="0,4,0,0" 
+                          IsChecked="{Binding UseRegex}"
+                          Content="Use Regex string"/>
+                <CheckBox x:Name="ckbRemoveJunkSpace" 
+                          IsChecked="{Binding RemoveJunkSpace}"
+                          Margin="0,6,0,0" 
+                          Content="Remove junk space"/>
             </StackPanel>
             <StackPanel Margin="24,0,0,0">
-                <CheckBox x:Name="ckbTitleCase" Margin="0,6,0,0" Content="Title Case"/>
-                <CheckBox x:Name="ckbExtension" Margin="0,4,0,0" Content="Include extension"/>
+                <CheckBox 
+                    x:Name="ckbTitleCase" 
+                    IsChecked="{Binding TitleCase}"
+                    Margin="0,6,0,0" 
+                    Content="Title Case"/>
+                <CheckBox 
+                    x:Name="ckbExtension" 
+                    IsChecked="{Binding IncludeExtension}"
+                    Margin="0,4,0,0" 
+                    Content="Include extension"/>
             </StackPanel>
             <StackPanel Margin="24,0,0,0">
-                <CheckBox x:Name="ckbIncludeChilds" Margin="0,6,0,0" Content="Include files and sub folders"/>
-                <CheckBox x:Name="ckbTVKhongDau" Margin="0,4,0,0">
+                <CheckBox 
+                    x:Name="ckbIncludeChilds" 
+                    IsChecked="{Binding IncludeFilesAndSubFolders}"
+                    Margin="0,6,0,0" 
+                    Content="Include files and sub folders"/>
+                <CheckBox 
+                    x:Name="ckbTVKhongDau" 
+                    IsChecked="{Binding ToTiengVietKhongDau}"
+                    Margin="0,4,0,0">
                     <CheckBox.Content>
                         Có dấu ⇒ Khong dau
                     </CheckBox.Content>
@@ -128,7 +151,7 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="..|.">
+                        <GridViewColumn Header="Rename">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox 

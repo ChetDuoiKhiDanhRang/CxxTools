@@ -33,17 +33,6 @@ namespace RenameTool
             }
         }
 
-        private string nameWithoutExtension;
-        public string NameWithoutExtension
-        {
-            get => nameWithoutExtension;
-            set
-            {
-                nameWithoutExtension = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("NameWithoutExtension"));
-            }
-        }
-
         private bool isFile;
         public bool IsFile
         {
@@ -56,25 +45,17 @@ namespace RenameTool
         }
 
 
-        private bool renamed = true;
-        public bool WillBeRename { get => renamed; set => renamed = value; }
-
-
-        private string extension;
-        public string Extension
-        {
-            get => extension;
+        private bool willBeRename = true;
+        public bool WillBeRename { 
+            get => willBeRename;
             set
             {
-                extension = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("Extension"));
+                willBeRename = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(WillBeRename)));
             }
         }
 
-
         public event PropertyChangedEventHandler? PropertyChanged;
-
-
 
         public void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
@@ -84,18 +65,14 @@ namespace RenameTool
         public ItemInfo(FileInfo file)
         {
             FullName = file.FullName;
-            NameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
             Name = file.Name;
-            Extension = file.Extension;
             IsFile = true;
         }
 
         public ItemInfo(DirectoryInfo directoryInfo)
         {
             FullName = directoryInfo.FullName;
-            NameWithoutExtension = directoryInfo.Name;
             Name = directoryInfo.Name;
-            Extension = "";
             IsFile = false;
         }
 

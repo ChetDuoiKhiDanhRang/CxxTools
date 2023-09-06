@@ -36,19 +36,47 @@ namespace RenameTool
             Items = new Dictionary<string, ItemInfo>();
             lscItems.ItemsSource = Items;
 
-            dpOptions.DataContext = this;
+            LoadSettings();
+
+            this.DataContext = this;
+            //dpOptions.DataContext = this;
         }
 
-        Dictionary<string, ItemInfo> _items;
+        private void LoadSettings()
+        {
+            UseRegex = Properties.Settings.Default.UseRegex;
+            RemoveJunkSpace = Properties.Settings.Default.RemoveJunkSpace;
+            TitleCase = Properties.Settings.Default.TitleCase;
+            IncludeExtension = Properties.Settings.Default.IncludeExtension;
+            IncludeFilesAndSubFolders = Properties.Settings.Default.IncludeFilesAndSubFolders;
+            ToTiengVietKhongDau = Properties.Settings.Default.ToTiengVietKhongDau;
+
+            RegexPattern = Properties.Settings.Default.RegexPattern;
+            ReplaceWith = Properties.Settings.Default.ReplaceWith;
+        }
+
+        private void SaveSettings()
+        {
+            var x = Properties.Settings.Default;
+            x.UseRegex = UseRegex;
+            x.RemoveJunkSpace = RemoveJunkSpace;
+            x.TitleCase = TitleCase;
+            x.IncludeExtension = IncludeExtension;
+            x.IncludeFilesAndSubFolders = IncludeFilesAndSubFolders;
+            x.ToTiengVietKhongDau = ToTiengVietKhongDau;
+            x.RegexPattern = RegexPattern;
+            x.ReplaceWith = ReplaceWith;
+            x.Save();
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public Dictionary<string, ItemInfo> Items
         {
-            get => _items;
+            get => items;
             set
             {
-                _items = value;
+                items = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
             }
         }
@@ -63,13 +91,32 @@ namespace RenameTool
             }
         }
 
-        public bool EntirePath
+        public string RegexPattern
         {
-            get => entirePath;
+            get { return regexPattern; }
+            set 
+            { 
+                regexPattern = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
+            }
+        }
+
+        public string ReplaceWith
+        {
+            get { return replaceWith; }
+            set { 
+                replaceWith = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReplaceWith"));
+            }
+        }
+
+        public bool RemoveJunkSpace
+        {
+            get => removeJunkSpace;
             set
             {
-                entirePath = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EntirePath)));
+                removeJunkSpace = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemoveJunkSpace)));
             }
         }
 
@@ -92,6 +139,7 @@ namespace RenameTool
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeExtension)));
             }
         }
+        
         public bool IncludeFilesAndSubFolders 
         { 
             get => includeFilesAndSubFolders;
@@ -101,6 +149,7 @@ namespace RenameTool
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeFilesAndSubFolders)));
             }
         }
+        
         public bool ToTiengVietKhongDau 
         { 
             get => toTiengVietKhongDau;
@@ -111,19 +160,23 @@ namespace RenameTool
             }
         }
 
-        bool useRegex;
+        Dictionary<string, ItemInfo> items;
 
-        bool entirePath;
+        bool useRegex = true;
 
-        bool titleCase;
+        private string regexPattern;
 
-        bool includeExtension;
+        private string replaceWith;
 
-        bool includeFilesAndSubFolders;
+        bool removeJunkSpace = true;
 
-        bool toTiengVietKhongDau;
+        bool titleCase = true;
 
+        bool includeExtension = true;
 
+        bool includeFilesAndSubFolders = true;
+
+        bool toTiengVietKhongDau = true;
 
         private void Window_DragEnter(object sender, DragEventArgs e)
         {
@@ -143,6 +196,11 @@ namespace RenameTool
             lscItems.ItemsSource = Items;
             
             
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            SaveSettings();
         }
     }
 }
