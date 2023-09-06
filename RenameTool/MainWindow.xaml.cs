@@ -135,13 +135,14 @@ namespace RenameTool
             IEnumerable<string> files = (IEnumerable<string>)e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files)
             {
-                var fi = new FileInfo(file);
-                if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, new ItemInfo(fi));
+                var fi = ItemInfo.CreateItemInfo(file);
+                if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, fi);
             }
 
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
-
+            
+            
         }
     }
 }

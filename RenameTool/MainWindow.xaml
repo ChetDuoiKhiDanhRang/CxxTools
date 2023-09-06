@@ -15,6 +15,11 @@
         PreviewDragEnter="Window_DragEnter"
         PreviewDrop="Window_Drop"
         >
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:TypeConverter x:Key="TypeConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="160"/>
@@ -28,7 +33,7 @@
             <GridSplitter.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="Transparent" Offset="0"/>
-                    <GradientStop Color="#005A9E" Offset="0.5"/>
+                    <GradientStop Color="DarkRed" Offset="0.5"/>
                     <GradientStop Color="Transparent" Offset="1"/>
                 </LinearGradientBrush>
             </GridSplitter.Background>
@@ -51,8 +56,7 @@
                     x:Name="tblkPattern"
                     Margin="0,2,2,2"
                     VerticalContentAlignment="Center"
-                    Foreground="WhiteSmoke"
-                    Background="#22000000"
+                    Background="#EFEFEF"
                     BorderBrush="Transparent"/>
 
             </DockPanel>
@@ -77,8 +81,7 @@
                     x:Name="tbRepalceWith"
                     Margin="0,2,2,2"
                     VerticalContentAlignment="Center"
-                    Foreground="WhiteSmoke"
-                    Background="#22000000"
+                    Background="#EFEFEF"
                     BorderBrush="Transparent"
                     />
             </DockPanel>
@@ -90,20 +93,25 @@
             VerticalAlignment="Top"
             Margin="0,75,0,0"
             >
+            <Image x:Name="aaa"/>
             <StackPanel DockPanel.Dock="Left">
                 <CheckBox x:Name="ckbRegex" Margin="0,4,0,0" Content="Use Regex string"/>
                 <CheckBox x:Name="ckbEntirePath" Margin="0,6,0,0" Content="Entire path"/>
-                <CheckBox x:Name="ckbTitleCase" Margin="0,6,0,0" Content="Title Case"/>
             </StackPanel>
             <StackPanel Margin="24,0,0,0">
+                <CheckBox x:Name="ckbTitleCase" Margin="0,6,0,0" Content="Title Case"/>
                 <CheckBox x:Name="ckbExtension" Margin="0,4,0,0" Content="Include extension"/>
+            </StackPanel>
+            <StackPanel Margin="24,0,0,0">
                 <CheckBox x:Name="ckbIncludeChilds" Margin="0,6,0,0" Content="Include files and sub folders"/>
-                <CheckBox x:Name="ckbTVKhongDau" Margin="0,6,0,0">
+                <CheckBox x:Name="ckbTVKhongDau" Margin="0,4,0,0">
                     <CheckBox.Content>
                         Có dấu ⇒ Khong dau
                     </CheckBox.Content>
                 </CheckBox>
             </StackPanel>
+
+
             <TextBox
                 x:Name="txbLog"
                 Margin="24,0,0,0"
@@ -123,21 +131,39 @@
                         <GridViewColumn Header="..|.">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsHitTestVisible="False" Focusable="False" IsChecked="{Binding Value.Renamed}"/>
+                                    <CheckBox 
+                                        VerticalAlignment="Center" 
+                                        IsHitTestVisible="False" 
+                                        Focusable="False" 
+                                        IsChecked="{Binding Value.WillBeRename}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Old name" DisplayMemberBinding="{Binding Key}"/>
-                        <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.Name}"/>
 
+                        <GridViewColumn Header="Type">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image
+                                        Stretch="UniformToFill"
+                                        Width="16"
+                                        Height="16"
+                                        VerticalAlignment="Center"
+                                        Source="{Binding Value.IsFile, 
+                                        Converter={StaticResource TypeConverter}}"
+                                        />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
+                        <GridViewColumn Header="Old name" DisplayMemberBinding="{Binding Value.FullName}"/>
+                        <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.Extension}"/>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>

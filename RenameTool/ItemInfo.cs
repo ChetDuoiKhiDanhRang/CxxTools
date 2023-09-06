@@ -48,27 +48,33 @@ namespace RenameTool
         public bool IsFile
         {
             get => isFile;
-            set
+            private set
             {
                 isFile = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("IsFile"));
             }
         }
 
-        private bool existed;
-        public bool Existed { get => existed; set => existed = value; }
 
-        private bool renamed = false;
-        public bool Renamed { get => renamed; set => renamed = value; }
+        private bool renamed = true;
+        public bool WillBeRename { get => renamed; set => renamed = value; }
 
-        private FileInfo FileInfo { get; set; }
 
-        public ItemInfo? Parent { get; set; }
-        
-        public string Extension { get; set; }
+        private string extension;
+        public string Extension
+        {
+            get => extension;
+            set
+            {
+                extension = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Extension"));
+            }
+        }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+
 
         public void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
@@ -77,14 +83,37 @@ namespace RenameTool
 
         public ItemInfo(FileInfo file)
         {
-            this.FileInfo = file;
-            this.Name = file.Name;
-            this.NameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
-            this.Extension = file.Extension;
-            this.IsFile = true;
-            this.FullName = file.FullName;
-            Renamed = true;
+            FullName = file.FullName;
+            NameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
+            Name = file.Name;
+            Extension = file.Extension;
+            IsFile = true;
         }
+
+        public ItemInfo(DirectoryInfo directoryInfo)
+        {
+            FullName = directoryInfo.FullName;
+            NameWithoutExtension = directoryInfo.Name;
+            Name = directoryInfo.Name;
+            Extension = "";
+            IsFile = false;
+        }
+
+        public static ItemInfo CreateItemInfo(string path)
+        {
+            var fa = System.IO.File.GetAttributes(path);
+            if ((fa & FileAttributes.Directory) != FileAttributes.Directory)
+            {
+                FileInfo fi = new FileInfo(path);
+                return new ItemInfo(fi);
+            }
+            else
+            {
+                DirectoryInfo directory = new DirectoryInfo(path);
+                return new ItemInfo(directory);
+            }
+        }
+
 
     }
 }

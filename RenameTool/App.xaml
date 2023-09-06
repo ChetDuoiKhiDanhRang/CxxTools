@@ -5,5 +5,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <BitmapImage x:Key="WindowsIcon" UriSource="./imgs/icon24.png"/>
+        <BitmapImage x:Key="FolderIcon" UriSource="./imgs/folder.png"/>
+        <BitmapImage x:Key="FileIcon" UriSource="./imgs/file.png"/>
     </Application.Resources>
 </Application>
