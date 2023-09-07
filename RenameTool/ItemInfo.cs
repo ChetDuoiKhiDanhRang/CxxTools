@@ -98,7 +98,10 @@ namespace RenameTool
         public void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
             PropertyChanged?.Invoke(this, eventArgs);
+            
         }
+
+        public ItemInfo Parent { get; set; }
 
         public ItemInfo(FileInfo file)
         {
@@ -106,6 +109,7 @@ namespace RenameTool
             Name = file.Name;
             IsFile = true;
             Location = Path.GetDirectoryName(file.FullName);
+            Level = FullName.Where(x => x==Path.DirectorySeparatorChar).Count();
         }
 
         public ItemInfo(DirectoryInfo directoryInfo)
@@ -114,6 +118,7 @@ namespace RenameTool
             Name = directoryInfo.Name;
             IsFile = false;
             Location = Path.GetDirectoryName(directoryInfo.FullName);
+            Level = FullName.Where(x => x==Path.DirectorySeparatorChar).Count();
         }
 
         public static ItemInfo CreateItemInfo(string path)

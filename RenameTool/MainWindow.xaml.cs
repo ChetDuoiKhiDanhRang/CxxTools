@@ -199,16 +199,16 @@ namespace RenameTool
 
             foreach (string file in files)
             {
-                var fi = ItemInfo.CreateItemInfo(file);
-                if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, fi);
-                if (IncludeFilesAndSubFolders && !fi.IsFile)
+                var ii = ItemInfo.CreateItemInfo(file);
+                if (!Items.Keys.Contains(ii.FullName)) Items.Add(ii.FullName, ii);
+                if (IncludeFilesAndSubFolders && !ii.IsFile)
                 {
                     DirectoryInfo di = new DirectoryInfo(file);
                     foreach (DirectoryInfo item in di.GetDirectories())
                     {
                         if (!Items.Keys.Contains(item.FullName))
                         {
-                            Items.Add(item.FullName, new ItemInfo(item));
+                            Items.Add(item.FullName, new ItemInfo(item) { Parent = ii });
                         }
                     }
 
@@ -216,10 +216,10 @@ namespace RenameTool
                     {
                         if (!Items.Keys.Contains(item.FullName))
                         {
-                            Items.Add(item.FullName, new ItemInfo(item));
+                            Items.Add(item.FullName, new ItemInfo(item) { Parent = ii});
                         }    
-                    }    
-
+                    }
+                    
                 }    
             }
 

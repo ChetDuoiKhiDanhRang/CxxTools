@@ -20,6 +20,7 @@
         <ResourceDictionary>
             <local:TypeConverter x:Key="TypeConverter" />
             <local:ItemLocationConverter x:Key="ItemLocationConverter" />
+            <local:LevelDetermine x:Key="LevelDetermine"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="5">
@@ -167,21 +168,32 @@
                         <GridViewColumn Header="Type">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image
-                                        Stretch="UniformToFill"
-                                        Width="16"
-                                        Height="16"
-                                        VerticalAlignment="Center"
-                                        Source="{Binding Value.IsFile,
-                                        Converter={StaticResource TypeConverter}}"
-                                        ToolTip="{Binding Value.Location,
-                                        Converter={StaticResource ItemLocationConverter }}"
-                                        />
+
+
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value.FullName}"/>
+                        <GridViewColumn Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Image
+                                            Stretch="UniformToFill"
+                                            Margin="{Binding Value, Converter={StaticResource LevelDetermine}}"
+                                            Width="16"
+                                            Height="16"
+                                            VerticalAlignment="Center"
+                                            Source="{Binding Value.IsFile,
+                                            Converter={StaticResource TypeConverter}}"
+                                            ToolTip="{Binding Value.Location,
+                                            Converter={StaticResource ItemLocationConverter }}"
+                                            />
+                                        <TextBlock Text="{Binding Value.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.Name}"/>
                     </GridView.Columns>
                 </GridView>
