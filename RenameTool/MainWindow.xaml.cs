@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -24,7 +26,7 @@ namespace RenameTool
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged, INotifyCollectionChanged
     {
         public MainWindow()
         {
@@ -70,6 +72,7 @@ namespace RenameTool
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public Dictionary<string, ItemInfo> Items
         {
@@ -78,6 +81,7 @@ namespace RenameTool
             {
                 items = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
         }
 
@@ -178,6 +182,8 @@ namespace RenameTool
 
         bool toTiengVietKhongDau = true;
 
+        ObservableCollection<ItemInfo> itemInfos;
+
         private void Window_DragEnter(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.Copy;
@@ -186,10 +192,35 @@ namespace RenameTool
         private void Window_Drop(object sender, DragEventArgs e)
         {
             IEnumerable<string> files = (IEnumerable<string>)e.Data.GetData(DataFormats.FileDrop);
+
+            if (files.Count() == 0) return;
+
+            Items.Clear();
+
             foreach (string file in files)
             {
                 var fi = ItemInfo.CreateItemInfo(file);
                 if (!Items.Keys.Contains(fi.FullName)) Items.Add(fi.FullName, fi);
+                if (IncludeFilesAndSubFolders && !fi.IsFile)
+                {
+                    DirectoryInfo di = new DirectoryInfo(file);
+                    foreach (DirectoryInfo item in di.GetDirectories())
+                    {
+                        if (!Items.Keys.Contains(item.FullName))
+                        {
+                            Items.Add(item.FullName, new ItemInfo(item));
+                        }
+                    }
+
+                    foreach (FileInfo item in di.GetFiles())
+                    {
+                        if (!Items.Keys.Contains(item.FullName))
+                        {
+                            Items.Add(item.FullName, new ItemInfo(item));
+                        }    
+                    }    
+
+                }    
             }
 
             lscItems.ItemsSource = null;

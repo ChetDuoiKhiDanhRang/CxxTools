@@ -19,6 +19,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <local:TypeConverter x:Key="TypeConverter" />
+            <local:ItemLocationConverter x:Key="ItemLocationConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="5">
@@ -171,15 +172,17 @@
                                         Width="16"
                                         Height="16"
                                         VerticalAlignment="Center"
-                                        Source="{Binding Value.IsFile, 
+                                        Source="{Binding Value.IsFile,
                                         Converter={StaticResource TypeConverter}}"
+                                        ToolTip="{Binding Value.Location,
+                                        Converter={StaticResource ItemLocationConverter }}"
                                         />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="Old name" DisplayMemberBinding="{Binding Value.FullName}"/>
-                        <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.Extension}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value.FullName}"/>
+                        <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.Name}"/>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>

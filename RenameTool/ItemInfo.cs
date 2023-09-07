@@ -44,9 +44,47 @@ namespace RenameTool
             }
         }
 
+        private string location = "";
+
+        public string Location
+        {
+            get { return location; }
+            set
+            {
+                location = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(Location)));
+            }
+        }
+
+
+        private string newName;
+
+        public string NewName
+        {
+            get { return newName; }
+            set
+            {
+                newName = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(NewName)));
+            }
+        }
+
+        private int level = 0;
+
+        public int Level
+        {
+            get { return level; }
+            set
+            {
+                level = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(Level)));
+            }
+        }
+
 
         private bool willBeRename = true;
-        public bool WillBeRename { 
+        public bool WillBeRename
+        {
             get => willBeRename;
             set
             {
@@ -67,6 +105,7 @@ namespace RenameTool
             FullName = file.FullName;
             Name = file.Name;
             IsFile = true;
+            Location = Path.GetDirectoryName(file.FullName);
         }
 
         public ItemInfo(DirectoryInfo directoryInfo)
@@ -74,6 +113,7 @@ namespace RenameTool
             FullName = directoryInfo.FullName;
             Name = directoryInfo.Name;
             IsFile = false;
+            Location = Path.GetDirectoryName(directoryInfo.FullName);
         }
 
         public static ItemInfo CreateItemInfo(string path)
@@ -86,11 +126,9 @@ namespace RenameTool
             }
             else
             {
-                DirectoryInfo directory = new DirectoryInfo(path);
-                return new ItemInfo(directory);
+                DirectoryInfo di = new DirectoryInfo(path);
+                return new ItemInfo(di);
             }
         }
-
-
     }
 }

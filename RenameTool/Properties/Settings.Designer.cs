@@ -40,10 +40,10 @@ namespace RenameTool.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool CaseSensitive {
             get {
-                return ((bool)(this["RemoveJunkSpace"]));
+                return ((bool)(this["CaseSensitive"]));
             }
             set {
-                this["RemoveJunkSpace"] = value;
+                this["CaseSensitive"] = value;
             }
         }
         
