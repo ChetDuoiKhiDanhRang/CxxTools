@@ -158,18 +158,10 @@
                                 <DataTemplate>
                                     <CheckBox 
                                         VerticalAlignment="Center" 
+                                        HorizontalAlignment="Center"
                                         IsHitTestVisible="False" 
                                         Focusable="False" 
                                         IsChecked="{Binding Value.WillBeRename}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-
-                        <GridViewColumn Header="Type">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-
-
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -202,6 +194,7 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>

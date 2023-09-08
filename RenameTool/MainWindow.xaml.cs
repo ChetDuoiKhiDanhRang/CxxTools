@@ -200,15 +200,25 @@ namespace RenameTool
             foreach (string file in files)
             {
                 var ii = ItemInfo.CreateItemInfo(file);
+                ii.RootLevel = ii.Level;
                 if (!Items.Keys.Contains(ii.FullName)) Items.Add(ii.FullName, ii);
                 if (IncludeFilesAndSubFolders && !ii.IsFile)
                 {
                     DirectoryInfo di = new DirectoryInfo(file);
-                    foreach (DirectoryInfo item in di.GetDirectories())
+                    foreach (DirectoryInfo item in di.GetDirectories("*", SearchOption.AllDirectories))
                     {
                         if (!Items.Keys.Contains(item.FullName))
                         {
-                            Items.Add(item.FullName, new ItemInfo(item) { Parent = ii });
+                            Items.Add(item.FullName, new ItemInfo(item) { RootLevel = ii.Level});
+                        }
+
+                        foreach (FileInfo fileInfo in di.GetFiles("*", SearchOption.AllDirectories))
+                        {
+                            if (!Items.Keys.Contains(fileInfo.FullName))
+                            {
+                                Items.Add(fileInfo.FullName, new ItemInfo(fileInfo) { RootLevel = ii.Level });
+                            }    
+
                         }
                     }
 
@@ -216,15 +226,18 @@ namespace RenameTool
                     {
                         if (!Items.Keys.Contains(item.FullName))
                         {
-                            Items.Add(item.FullName, new ItemInfo(item) { Parent = ii});
+                            Items.Add(item.FullName, new ItemInfo(item) { RootLevel = ii.Level});
                         }    
                     }
                     
                 }    
             }
 
+            var source = Items.ToList();
+            source.Sort(new ItemInfoComparer());
+
             lscItems.ItemsSource = null;
-            lscItems.ItemsSource = Items;
+            lscItems.ItemsSource = source;
             
             
         }

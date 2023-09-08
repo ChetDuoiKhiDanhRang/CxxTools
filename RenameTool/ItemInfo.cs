@@ -9,8 +9,22 @@ using System.Threading.Tasks;
 
 namespace RenameTool
 {
-    public class ItemInfo//: INotifyPropertyChanged
+    public class ItemInfo : IComparable//: INotifyPropertyChanged
     {
+
+        private string nameWithoutExtension;
+
+        public string NameWithoutExtension
+        {
+            get { return nameWithoutExtension; }
+            set
+            {
+                nameWithoutExtension = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(NameWithoutExtension)));
+            }
+        }
+
+
         private string name;
         public string Name
         {
@@ -69,6 +83,21 @@ namespace RenameTool
             }
         }
 
+
+        private int rootLevel = 0;
+
+        public int RootLevel
+        {
+            get { return rootLevel; }
+            set
+            {
+                rootLevel = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(RootLevel)));
+            }
+        }
+
+
+
         private int level = 0;
 
         public int Level
@@ -98,18 +127,19 @@ namespace RenameTool
         public void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
             PropertyChanged?.Invoke(this, eventArgs);
-            
+
         }
 
-        public ItemInfo Parent { get; set; }
+        public ItemInfo? Parent { get; set; }
 
-        public ItemInfo(FileInfo file)
+        public ItemInfo(FileInfo fileInfo)
         {
-            FullName = file.FullName;
-            Name = file.Name;
+            FullName = fileInfo.FullName;
+            Name = fileInfo.Name;
             IsFile = true;
-            Location = Path.GetDirectoryName(file.FullName);
-            Level = FullName.Where(x => x==Path.DirectorySeparatorChar).Count();
+            Location = Path.GetDirectoryName(fileInfo.FullName);
+            Level = FullName.Where(x => x == Path.DirectorySeparatorChar).Count();
+            NameWithoutExtension = Path.GetFileNameWithoutExtension(fileInfo.FullName);
         }
 
         public ItemInfo(DirectoryInfo directoryInfo)
@@ -118,11 +148,13 @@ namespace RenameTool
             Name = directoryInfo.Name;
             IsFile = false;
             Location = Path.GetDirectoryName(directoryInfo.FullName);
-            Level = FullName.Where(x => x==Path.DirectorySeparatorChar).Count();
+            Level = FullName.Where(x => x == Path.DirectorySeparatorChar).Count();
+            NameWithoutExtension = Name;
         }
 
         public static ItemInfo CreateItemInfo(string path)
         {
+            if (path == null) return null;
             var fa = System.IO.File.GetAttributes(path);
             if ((fa & FileAttributes.Directory) != FileAttributes.Directory)
             {
@@ -134,6 +166,16 @@ namespace RenameTool
                 DirectoryInfo di = new DirectoryInfo(path);
                 return new ItemInfo(di);
             }
+        }
+
+        public int CompareTo(object? obj)
+        {
+            var o = (ItemInfo)obj;
+            if (o.Location == Location)
+            {
+                return IsFile.CompareTo(o.IsFile);
+            }
+            return Location.CompareTo(o.Location);
         }
     }
 }
