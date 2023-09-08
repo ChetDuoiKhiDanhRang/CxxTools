@@ -19,7 +19,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <local:TypeConverter x:Key="TypeConverter" />
-            <local:ItemLocationConverter x:Key="ItemLocationConverter" />
+            <local:ItemInfoToTooltipConverter x:Key="ItemLocationConverter" />
             <local:LevelDetermine x:Key="LevelDetermine"/>
         </ResourceDictionary>
     </Window.Resources>
@@ -159,6 +159,7 @@
                                     <CheckBox 
                                         VerticalAlignment="Center" 
                                         HorizontalAlignment="Center"
+                                        Margin="0,0,0,0"
                                         IsHitTestVisible="False" 
                                         Focusable="False" 
                                         IsChecked="{Binding Value.WillBeRename}"/>
@@ -178,7 +179,7 @@
                                             VerticalAlignment="Center"
                                             Source="{Binding Value.IsFile,
                                             Converter={StaticResource TypeConverter}}"
-                                            ToolTip="{Binding Value.Location,
+                                            ToolTip="{Binding Value,
                                             Converter={StaticResource ItemLocationConverter }}"
                                             />
                                         <TextBlock Text="{Binding Value.Name}"/>

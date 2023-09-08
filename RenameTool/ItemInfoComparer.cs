@@ -10,7 +10,7 @@ namespace RenameTool
     {
         public int Compare(KeyValuePair<string, ItemInfo> x, KeyValuePair<string, ItemInfo> y)
         {
-            return x.Value.CompareTo(y.Value);
+            return x.Value.IndexString.CompareTo(y.Value.IndexString);
         }
     }
 }

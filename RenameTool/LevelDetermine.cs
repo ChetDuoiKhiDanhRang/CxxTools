@@ -15,7 +15,7 @@ namespace RenameTool
         {
             ItemInfo i = (ItemInfo)value;
 
-            Thickness tk = new Thickness((i.Level - i.RootLevel)*16,0,0,0);
+            Thickness tk = new Thickness((i.Level - i.RootLevel)*16,0,4,0);
 
             return tk;
         }

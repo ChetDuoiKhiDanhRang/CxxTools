@@ -13,7 +13,6 @@ namespace RenameTool
     {
 
         private string nameWithoutExtension;
-
         public string NameWithoutExtension
         {
             get { return nameWithoutExtension; }
@@ -25,11 +24,27 @@ namespace RenameTool
         }
 
 
+        private string extension;
+        public string Extension
+        {
+            get { return extension; }
+            set
+            {
+                extension = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(Extension)));
+            }
+        }
+
+
+
         private string name;
         public string Name
         {
-            get => name;
-            set
+            get
+            {
+                return NameWithoutExtension + Extension;
+            }
+            private set
             {
                 name = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("Name"));
@@ -39,8 +54,11 @@ namespace RenameTool
         private string fullName;
         public string FullName
         {
-            get => fullName;
-            set
+            get
+            {
+                return (Location + Path.DirectorySeparatorChar + Name).Replace("\\\\", "\\");
+            }
+            private set
             {
                 fullName = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("FullName"));
@@ -58,8 +76,8 @@ namespace RenameTool
             }
         }
 
-        private string location = "";
 
+        private string location = "";
         public string Location
         {
             get { return location; }
@@ -99,7 +117,6 @@ namespace RenameTool
 
 
         private int level = 0;
-
         public int Level
         {
             get { return level; }
@@ -112,6 +129,7 @@ namespace RenameTool
 
 
         private bool willBeRename = true;
+
         public bool WillBeRename
         {
             get => willBeRename;
@@ -130,26 +148,76 @@ namespace RenameTool
 
         }
 
-        public ItemInfo? Parent { get; set; }
+        private ItemInfo? parent;
+        public ItemInfo? Parent
+        {
+            get => parent;
+            set
+            {
+                if (value != null && parent != null)
+                {
+
+                    parent.Childs.Remove(this);
+                }
+
+                parent = value;
+                parent.Childs.Add(this);
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(Parent)));
+            }
+        }
+
+        private List<ItemInfo> childs;
+        public List<ItemInfo> Childs
+        {
+            get => childs;
+            set
+            {
+                childs = value;
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(Childs)));
+            }
+        }
+
+        private string indexString = "";
+
+        public string IndexString
+        {
+            get 
+            {
+                return indexString;
+            }
+            set 
+            { 
+                indexString = value; 
+            }
+        }
+
+
 
         public ItemInfo(FileInfo fileInfo)
         {
-            FullName = fileInfo.FullName;
-            Name = fileInfo.Name;
             IsFile = true;
+            NameWithoutExtension = Path.GetFileNameWithoutExtension(fileInfo.FullName);
+            Extension = Path.GetExtension(fileInfo.FullName);
             Location = Path.GetDirectoryName(fileInfo.FullName);
             Level = FullName.Where(x => x == Path.DirectorySeparatorChar).Count();
-            NameWithoutExtension = Path.GetFileNameWithoutExtension(fileInfo.FullName);
+            Childs = new List<ItemInfo>();
+            PropertyChanged += ItemInfo_PropertyChanged;
+        }
+
+        private void ItemInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Parent) && Parent!=null) IndexString = Parent.IndexString + "." + (IsFile?"fi":"fo") + Parent.Childs.Count();
         }
 
         public ItemInfo(DirectoryInfo directoryInfo)
         {
-            FullName = directoryInfo.FullName;
-            Name = directoryInfo.Name;
             IsFile = false;
+            NameWithoutExtension = (directoryInfo.Name);
+            Extension = "";
             Location = Path.GetDirectoryName(directoryInfo.FullName);
             Level = FullName.Where(x => x == Path.DirectorySeparatorChar).Count();
-            NameWithoutExtension = Name;
+            Childs = new List<ItemInfo>();
+            PropertyChanged += ItemInfo_PropertyChanged;
         }
 
         public static ItemInfo CreateItemInfo(string path)

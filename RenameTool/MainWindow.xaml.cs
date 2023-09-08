@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +27,7 @@ namespace RenameTool
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged, INotifyCollectionChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public MainWindow()
         {
@@ -36,12 +37,56 @@ namespace RenameTool
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Items = new Dictionary<string, ItemInfo>();
-            lscItems.ItemsSource = Items;
 
             LoadSettings();
 
             this.DataContext = this;
             //dpOptions.DataContext = this;
+        }
+
+        private void PropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
+        {
+
+        }
+
+        private void GenerateItemsSource(List<string> files)
+        {
+            Items.Clear();
+            int count = 0;
+            foreach (string file in files)
+            {
+                var ii = ItemInfo.CreateItemInfo(file);
+                ii.RootLevel = ii.Level;
+                ii.IndexString = count++.ToString();
+                if (!Items.Keys.Contains(ii.FullName)) Items.Add(ii.FullName, ii);
+                if (IncludeFilesAndSubFolders && !ii.IsFile)
+                {
+                    DirectoryInfo di = new DirectoryInfo(file);
+                    foreach (DirectoryInfo subdi_item in di.GetDirectories("*", SearchOption.AllDirectories))
+                    {
+                        if (!Items.Keys.Contains(subdi_item.FullName))
+                        {
+                            ItemInfo subii = new ItemInfo(subdi_item);
+                            subii.RootLevel = ii.Level;
+                            subii.Parent = Items[System.IO.Path.GetDirectoryName(subdi_item.FullName)];
+
+                            Items.Add(subdi_item.FullName, subii);
+                        }
+                    }
+
+                    foreach (FileInfo fileInfo in di.GetFiles("*", SearchOption.AllDirectories))
+                    {
+                        if (!Items.Keys.Contains(fileInfo.FullName))
+                        {
+                            ItemInfo subii = new ItemInfo(fileInfo);
+                            subii.RootLevel = ii.Level;
+                            subii.Parent = Items[System.IO.Path.GetDirectoryName(fileInfo.FullName)];
+                            Items.Add(fileInfo.FullName, subii);
+                        }
+
+                    }
+                }
+            }
         }
 
         private void LoadSettings()
@@ -72,7 +117,6 @@ namespace RenameTool
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public Dictionary<string, ItemInfo> Items
         {
@@ -81,13 +125,12 @@ namespace RenameTool
             {
                 items = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
         }
 
-        public bool UseRegex 
-        { 
-            get => useRegex; 
+        public bool UseRegex
+        {
+            get => useRegex;
             set
             {
                 useRegex = value;
@@ -98,8 +141,8 @@ namespace RenameTool
         public string RegexPattern
         {
             get { return regexPattern; }
-            set 
-            { 
+            set
+            {
                 regexPattern = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
             }
@@ -108,7 +151,8 @@ namespace RenameTool
         public string ReplaceWith
         {
             get { return replaceWith; }
-            set { 
+            set
+            {
                 replaceWith = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReplaceWith"));
             }
@@ -134,8 +178,8 @@ namespace RenameTool
             }
         }
 
-        public bool IncludeExtension 
-        { 
+        public bool IncludeExtension
+        {
             get => includeExtension;
             set
             {
@@ -143,9 +187,9 @@ namespace RenameTool
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeExtension)));
             }
         }
-        
-        public bool IncludeFilesAndSubFolders 
-        { 
+
+        public bool IncludeFilesAndSubFolders
+        {
             get => includeFilesAndSubFolders;
             set
             {
@@ -153,9 +197,9 @@ namespace RenameTool
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeFilesAndSubFolders)));
             }
         }
-        
-        public bool ToTiengVietKhongDau 
-        { 
+
+        public bool ToTiengVietKhongDau
+        {
             get => toTiengVietKhongDau;
             set
             {
@@ -163,6 +207,7 @@ namespace RenameTool
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToTiengVietKhongDau)));
             }
         }
+
 
         Dictionary<string, ItemInfo> items;
 
@@ -182,64 +227,46 @@ namespace RenameTool
 
         bool toTiengVietKhongDau = true;
 
-        ObservableCollection<ItemInfo> itemInfos;
+
+
+        //store dropped items
+        List<string> droppedItems = new List<string>();
+        public List<string> DroppedItems
+        {
+            get => droppedItems;
+            set
+            {
+                droppedItems = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
+            }
+        }
 
         private void Window_DragEnter(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.Copy;
         }
-
         private void Window_Drop(object sender, DragEventArgs e)
         {
-            IEnumerable<string> files = (IEnumerable<string>)e.Data.GetData(DataFormats.FileDrop);
-
+            List<string> files = ((IEnumerable<string>)e.Data.GetData(DataFormats.FileDrop)).ToList();
+            
             if (files.Count() == 0) return;
 
-            Items.Clear();
+            files.Sort();
 
-            foreach (string file in files)
-            {
-                var ii = ItemInfo.CreateItemInfo(file);
-                ii.RootLevel = ii.Level;
-                if (!Items.Keys.Contains(ii.FullName)) Items.Add(ii.FullName, ii);
-                if (IncludeFilesAndSubFolders && !ii.IsFile)
-                {
-                    DirectoryInfo di = new DirectoryInfo(file);
-                    foreach (DirectoryInfo item in di.GetDirectories("*", SearchOption.AllDirectories))
-                    {
-                        if (!Items.Keys.Contains(item.FullName))
-                        {
-                            Items.Add(item.FullName, new ItemInfo(item) { RootLevel = ii.Level});
-                        }
+            DroppedItems.Clear();
+            DroppedItems.AddRange(files);
+            GenerateItemsSource(DroppedItems);
 
-                        foreach (FileInfo fileInfo in di.GetFiles("*", SearchOption.AllDirectories))
-                        {
-                            if (!Items.Keys.Contains(fileInfo.FullName))
-                            {
-                                Items.Add(fileInfo.FullName, new ItemInfo(fileInfo) { RootLevel = ii.Level });
-                            }    
 
-                        }
-                    }
 
-                    foreach (FileInfo item in di.GetFiles())
-                    {
-                        if (!Items.Keys.Contains(item.FullName))
-                        {
-                            Items.Add(item.FullName, new ItemInfo(item) { RootLevel = ii.Level});
-                        }    
-                    }
-                    
-                }    
-            }
 
             var source = Items.ToList();
             source.Sort(new ItemInfoComparer());
 
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = source;
-            
-            
+
+
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

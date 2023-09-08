@@ -8,12 +8,12 @@ using System.Windows.Data;
 
 namespace RenameTool
 {
-    class ItemLocationConverter : IValueConverter
+    class ItemInfoToTooltipConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string localtion = (string)value;
-            return "Location: " + localtion;
+            string tooltip = ((ItemInfo)value).IndexString;
+            return tooltip;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
