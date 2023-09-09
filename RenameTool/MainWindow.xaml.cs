@@ -36,17 +36,33 @@ namespace RenameTool
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Items = new Dictionary<string, ItemInfo>();
+            //Items = new Dictionary<string, ItemInfo>();
 
             LoadSettings();
 
             this.DataContext = this;
+
+
+            lscItems.ItemsSource = null;
+            lscItems.ItemsSource = Items;
+
+            PropertyChanged += OnPropertyChanged;
+            
             //dpOptions.DataContext = this;
         }
 
-        private void GenerateItemsSource(List<string> files)
+        private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            Items.Clear();
+
+            if (e.PropertyName == nameof(IncludeFilesAndSubFolders))
+            {
+                GenerateItemsSource(DroppedItems);
+            }
+        }
+
+        private List<KeyValuePair<string,ItemInfo>> GenerateItemsSource(List<string> files)
+        {
+            var Items = new Dictionary<string,ItemInfo>();
             int count = 0;
             foreach (string file in files)
             {
@@ -82,6 +98,8 @@ namespace RenameTool
                     }
                 }
             }
+            var result = Items.OrderBy(k => k.Value.IndexString).ToList();
+            return result;
         }
 
         private void LoadSettings()
@@ -113,7 +131,7 @@ namespace RenameTool
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Dictionary<string, ItemInfo> Items
+        public List<KeyValuePair<string, ItemInfo>> Items
         {
             get => items;
             set
@@ -204,7 +222,7 @@ namespace RenameTool
         }
 
 
-        Dictionary<string, ItemInfo> items;
+        List<KeyValuePair<string, ItemInfo>> items = new List<KeyValuePair<string, ItemInfo>>();
 
         bool useRegex = true;
 
@@ -250,16 +268,10 @@ namespace RenameTool
 
             DroppedItems.Clear();
             DroppedItems.AddRange(files);
-            GenerateItemsSource(DroppedItems);
+            Items = GenerateItemsSource(DroppedItems);
 
 
 
-
-            var source = Items.ToList();
-            source.Sort(new ItemInfoComparer());
-
-            lscItems.ItemsSource = null;
-            lscItems.ItemsSource = source;
 
 
         }
