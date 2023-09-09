@@ -160,9 +160,9 @@
                                         VerticalAlignment="Center" 
                                         HorizontalAlignment="Center"
                                         Margin="0,0,0,0"
-                                        IsHitTestVisible="False" 
-                                        Focusable="False" 
                                         IsChecked="{Binding Value.WillBeRename}"/>
+                                        <!--IsHitTestVisible="False" 
+                                        Focusable="False"--> 
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -174,8 +174,8 @@
                                         <Image
                                             Stretch="UniformToFill"
                                             Margin="{Binding Value, Converter={StaticResource LevelDetermine}}"
-                                            Width="16"
-                                            Height="16"
+                                            Width="20"
+                                            Height="20"
                                             VerticalAlignment="Center"
                                             Source="{Binding Value.IsFile,
                                             Converter={StaticResource TypeConverter}}"

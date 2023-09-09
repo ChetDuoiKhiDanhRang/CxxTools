@@ -44,11 +44,6 @@ namespace RenameTool
             //dpOptions.DataContext = this;
         }
 
-        private void PropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
-        {
-
-        }
-
         private void GenerateItemsSource(List<string> files)
         {
             Items.Clear();
