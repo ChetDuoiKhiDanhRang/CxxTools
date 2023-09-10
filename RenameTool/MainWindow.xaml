@@ -48,6 +48,29 @@
             BorderThickness="1"
             CornerRadius="3"
             >
+            <Border.Resources>
+                <Style x:Key="invalidateRegexTextBox" TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter 
+                                Property="ToolTip" 
+                                Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                Path=(Validation.Errors)/ErrorContent}">
+                            </Setter>
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+                <Style x:Key="invalidateFileNameTextBox" TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                
+            </Border.Resources>
             <DockPanel LastChildFill="True">
                 <Label 
                     DockPanel.Dock="Left"
@@ -58,7 +81,10 @@
                 <TextBox
                     x:Name="txbPattern"
                     Margin="0,1,1,1"
-                    Text="{Binding RegexPattern, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{StaticResource invalidateRegexTextBox}"
+                    Text="{Binding RegexPattern, 
+                    UpdateSourceTrigger=PropertyChanged,
+                    ValidatesOnExceptions=True}"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
                     BorderBrush="Transparent"/>
@@ -83,7 +109,8 @@
                 />
                 <TextBox
                     x:Name="txbReplaceWith"
-                    Text="{Binding ReplaceWith, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding ReplaceWith, 
+                    UpdateSourceTrigger=PropertyChanged}"
                     Margin="0,1,1,1"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
@@ -153,7 +180,7 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="Rename">
+                        <GridViewColumn Header=" ">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox 
@@ -161,8 +188,8 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,0,0,0"
                                         IsChecked="{Binding Value.WillBeRename}"/>
-                                        <!--IsHitTestVisible="False" 
-                                        Focusable="False"--> 
+                                    <!--IsHitTestVisible="False" 
+                                        Focusable="False"-->
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -187,7 +214,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.Name}"/>
+                        <GridViewColumn Header="New name" DisplayMemberBinding="{Binding Value.NewName}"/>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>

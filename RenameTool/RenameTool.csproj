@@ -19,6 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="BaseTools">
+      <HintPath>..\..\CxxLibs\BaseTools\bin\Debug\netstandard2.1\BaseTools.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="imgs\file.png" />
     <Resource Include="imgs\folder.png" />
     <Resource Include="imgs\icon24.png">

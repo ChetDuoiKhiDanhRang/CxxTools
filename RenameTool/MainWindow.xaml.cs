@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using BaseTools;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,6 +39,7 @@ namespace RenameTool
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Items = new Dictionary<string, ItemInfo>();
+            PropertyChanged += OnPropertyChanged;
 
             LoadSettings();
 
@@ -46,45 +49,68 @@ namespace RenameTool
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
 
-            PropertyChanged += OnPropertyChanged;
-            
+
             //dpOptions.DataContext = this;
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == nameof(RegexPattern) ||
+                e.PropertyName == nameof(IncludeExtension) ||
+                e.PropertyName == nameof(TitleCase) ||
+                e.PropertyName == nameof(CaseSensitive) ||
+                e.PropertyName == nameof(ReplaceWith) ||
+                e.PropertyName == nameof(ToTiengVietKhongDau))
+            {
+                GenerateNewName(Items);
+            }
 
             if (e.PropertyName == nameof(IncludeFilesAndSubFolders))
             {
-                GenerateItemsSource(DroppedItems);
+                Items = GenerateItemsSource(DroppedItems);
+                GenerateNewName(Items);
+
+
             }
+
+            lscItems.ItemsSource = null;
+            lscItems.ItemsSource = Items;
         }
 
-        private List<KeyValuePair<string,ItemInfo>> GenerateItemsSource(List<string> files)
+        private List<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> files)
         {
-            var Items = new Dictionary<string,ItemInfo>();
+            var Items = new Dictionary<string, ItemInfo>();
             int count = 0;
             foreach (string file in files)
             {
                 var ii = ItemInfo.CreateItemInfo(file);
                 ii.RootLevel = ii.Level;
                 ii.IndexString = count++.ToString();
+
+                //add the dragged in files and folders
                 if (!Items.Keys.Contains(ii.FullName)) Items.Add(ii.FullName, ii);
+
+                // if included child items
                 if (IncludeFilesAndSubFolders && !ii.IsFile)
                 {
                     DirectoryInfo di = new DirectoryInfo(file);
-                    foreach (DirectoryInfo subdi_item in di.GetDirectories("*", SearchOption.AllDirectories))
-                    {
-                        if (!Items.Keys.Contains(subdi_item.FullName))
-                        {
-                            ItemInfo subii = new ItemInfo(subdi_item);
-                            subii.RootLevel = ii.Level;
-                            subii.Parent = Items[System.IO.Path.GetDirectoryName(subdi_item.FullName)];
 
-                            Items.Add(subdi_item.FullName, subii);
+                    //add sub folders
+                    foreach (DirectoryInfo directoryItem in di.GetDirectories("*", SearchOption.AllDirectories))
+                    {
+                        if (!Items.Keys.Contains(directoryItem.FullName))
+                        {
+                            ItemInfo subii = new ItemInfo(directoryItem);
+                            subii.RootLevel = ii.Level;
+
+                            //find and set parent of folder
+                            subii.Parent = Items[System.IO.Path.GetDirectoryName(directoryItem.FullName)];
+
+                            Items.Add(directoryItem.FullName, subii);
                         }
                     }
 
+                    //add files
                     foreach (FileInfo fileInfo in di.GetFiles("*", SearchOption.AllDirectories))
                     {
                         if (!Items.Keys.Contains(fileInfo.FullName))
@@ -100,6 +126,32 @@ namespace RenameTool
             }
             var result = Items.OrderBy(k => k.Value.IndexString).ToList();
             return result;
+        }
+
+        private void GenerateNewName(List<KeyValuePair<string, ItemInfo>> items)
+        {
+            if (RegexPattern == "") return;
+            foreach (var item in items)
+            {
+                string targetName = IncludeExtension ? item.Value.Name : item.Value.NameWithoutExtension;
+
+                if (UseRegex)
+                {
+                    Regex regex = new Regex(RegexPattern, CaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+
+                    foreach (Match match in regex.Matches(targetName))
+                    {
+                        targetName = targetName.Replace(match.Value, ReplaceWith);
+                    }
+                }
+                else
+                {
+                    targetName = targetName.Replace(RegexPattern, ReplaceWith, CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
+                }
+                item.Value.NewName = IncludeExtension ? targetName : (targetName + item.Value.Extension);
+                if (TitleCase) { item.Value.NewName = StringHandler.Proper(item.Value.NewName); }
+                if (ToTiengVietKhongDau) { item.Value.NewName = StringHandler.TiengVietKhongDau(item.Value.NewName); }
+            }
         }
 
         private void LoadSettings()
@@ -156,8 +208,16 @@ namespace RenameTool
             get { return regexPattern; }
             set
             {
-                regexPattern = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
+                try
+                {
+                    if (UseRegex) { Regex regex = new Regex(value); }
+                    regexPattern = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException("Wrong regex pattern");
+                }
             }
         }
 
@@ -221,6 +281,17 @@ namespace RenameTool
             }
         }
 
+        //store dropped items
+        public List<string> DroppedItems
+        {
+            get => droppedItems;
+            set
+            {
+                droppedItems = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
+            }
+        }
+
 
         List<KeyValuePair<string, ItemInfo>> items = new List<KeyValuePair<string, ItemInfo>>();
 
@@ -240,19 +311,7 @@ namespace RenameTool
 
         bool toTiengVietKhongDau = true;
 
-
-
-        //store dropped items
         List<string> droppedItems = new List<string>();
-        public List<string> DroppedItems
-        {
-            get => droppedItems;
-            set
-            {
-                droppedItems = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
-            }
-        }
 
         private void Window_DragEnter(object sender, DragEventArgs e)
         {
@@ -261,7 +320,7 @@ namespace RenameTool
         private void Window_Drop(object sender, DragEventArgs e)
         {
             List<string> files = ((IEnumerable<string>)e.Data.GetData(DataFormats.FileDrop)).ToList();
-            
+
             if (files.Count() == 0) return;
 
             files.Sort();
@@ -269,11 +328,11 @@ namespace RenameTool
             DroppedItems.Clear();
             DroppedItems.AddRange(files);
             Items = GenerateItemsSource(DroppedItems);
+            GenerateNewName(Items);
 
 
-
-
-
+            lscItems.ItemsSource = null;
+            lscItems.ItemsSource = Items;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
