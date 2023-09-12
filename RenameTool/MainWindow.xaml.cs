@@ -10,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace RenameTool
             this.DataContext = this;
 
             PropertyChanged += OnPropertyChanged;
-            
+
             LoadSettings();
 
             lscItems.ItemsSource = null;
@@ -71,7 +72,7 @@ namespace RenameTool
             var b1 = Validation.GetHasError(txbPattern);
             var b2 = Validation.GetHasError(txbReplaceWith);
 
-            btnApply.IsEnabled = (!b1) && (!b2);
+            btnApply.IsEnabled = !(this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0);
             btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
             btnApply.InvalidateVisual();
 
@@ -105,7 +106,7 @@ namespace RenameTool
                             ItemInfo subii = new ItemInfo(directoryItem);
                             subii.RootLevel = ii.Level;
 
-                            //find and set parent of folder
+                            //set parent of folder
                             subii.Parent = Items[System.IO.Path.GetDirectoryName(directoryItem.FullName)];
 
                             Items.Add(directoryItem.FullName, subii);
@@ -133,7 +134,9 @@ namespace RenameTool
         private void GenerateNewName(List<KeyValuePair<string, ItemInfo>> items)
         {
             if (RegexPattern == "" ||
-                this[nameof(ReplaceWith)].Length > 0)
+                this[nameof(ReplaceWith)].Length > 0 ||
+                this[nameof(RegexPattern)].Length > 0
+                    )
                 return;
             foreach (var item in items)
             {
@@ -220,19 +223,8 @@ namespace RenameTool
             get { return regexPattern; }
             set
             {
-                try
-                {
-                    if (UseRegex && (value != "^") && (value != "$"))
-                    {
-                        Regex regex = new Regex(value);
-                    }
-                    regexPattern = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
-                }
-                catch (Exception ex)
-                {
-                    throw new ArgumentException("Wrong regex pattern!\n" + ex.Message);
-                }
+                regexPattern = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
             }
         }
 
@@ -314,7 +306,7 @@ namespace RenameTool
             get
             {
                 string result = "";
-                
+
                 if (columnName == nameof(ReplaceWith))
                 {
                     string invalidChar = string.Join("", System.IO.Path.GetInvalidFileNameChars());
@@ -329,6 +321,24 @@ namespace RenameTool
 
                     return result = invalidchars.Length > 0 ? ("Invalid char: '" + invalidchars + "'") : "";
                 }
+                else if (columnName == nameof(RegexPattern))
+                {
+                    if (RegexPattern == "") result = "Empty pattern!";
+
+                    if (UseRegex && RegexPattern != "$" && RegexPattern != "^")
+                    {
+
+                        try
+                        {
+                            Regex rg = new Regex(RegexPattern);
+                        }
+                        catch (Exception ex)
+                        {
+                            result = "Wrong regex pattern\n" + ex.Message;
+                        }
+                    }
+                }
+
                 return result;
             }
         }
@@ -337,9 +347,9 @@ namespace RenameTool
 
         bool useRegex = true;
 
-        private string regexPattern ="";
+        private string regexPattern = "";
 
-        private string replaceWith ="";
+        private string replaceWith = "";
 
         bool caseSensitive = true;
 
@@ -400,7 +410,78 @@ namespace RenameTool
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("ENABLE!");
+            var RenameList = Items.Where(x => x.Value.WillBeRename).ToList();
+            if (!RenameList.Any()) return;
+
+            var fileList = RenameList.Where(x => x.Value.IsFile).ToList();
+            var folderList = RenameList.Where(x => !x.Value.IsFile).OrderByDescending(x => x.Value.Level).ToList();
+            List<string> newDroppedItems = new List<string>();
+
+            foreach (var file in fileList)
+            {
+                var fileInfo = new FileInfo(file.Value.FullName);
+                if (fileInfo.Exists)
+                {
+                    try
+                    {
+                        fileInfo.MoveTo(file.Value.Location + System.IO.Path.DirectorySeparatorChar + file.Value.NewName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Fail rename file: " + file.Key + "\n" + ex.Message + "\nCLOSE ALL PROGRAMS AND TRY AGAIN!",
+                                "ERROR",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                        this.Close();
+                        Application.Current.Shutdown();
+                    }
+                    foreach (var item in DroppedItems)
+                    {
+                        if (item == file.Key) { newDroppedItems.Add(fileInfo.FullName); break; }
+                    }
+                }
+            }
+
+            foreach (var folder in folderList)
+            {
+                var dirInfo = new DirectoryInfo(folder.Value.FullName);
+                if (dirInfo.Exists)
+                {
+                    if (!(string.Compare(folder.Value.Name, (folder.Value.NewName), true) == 0))
+                    {
+                        try
+                        {
+                            dirInfo.MoveTo((folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName).Replace("\\\\", "\\"));
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Fail rename folder: " + folder.Key + "\n" + ex.Message + "\nCLOSE ALL EXPLORER AND TRY AGAIN!",
+                                "ERROR",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            this.Close();
+                            Application.Current.Shutdown();
+                        }
+
+                    }
+                    foreach (var item in DroppedItems)
+                    {
+                        if (item == folder.Key) { newDroppedItems.Add((folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName)); break; }
+                    }
+                }
+            }
+
+            DroppedItems.Clear();
+            DroppedItems.AddRange(newDroppedItems);
+
+
+            Items.Clear();
+            Items = GenerateItemsSource(DroppedItems);
+            GenerateNewName(Items);
+
+            lscItems.ItemsSource = null;
+            lscItems.ItemsSource = Items;
+
         }
     }
 }

@@ -85,7 +85,7 @@
 
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="160"/>
+            <RowDefinition Height="135"/>
             <RowDefinition Height="1"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -212,9 +212,6 @@
                 BorderBrush="#EE005A9E"
                 CornerRadius="3"
                 >
-                <Border.Resources>
-                    <local:Bool2Brush x:Key="IsEnableToColor"/>
-                </Border.Resources>
                 <Button
                     x:Name="btnApply"
                     VerticalAlignment="Stretch"

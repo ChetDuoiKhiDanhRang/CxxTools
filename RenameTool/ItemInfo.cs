@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RenameTool
 {
-    public class ItemInfo : IComparable//: INotifyPropertyChanged
+    public class ItemInfo//: INotifyPropertyChanged
     {
 
         private string nameWithoutExtension;
@@ -181,13 +181,13 @@ namespace RenameTool
 
         public string IndexString
         {
-            get 
+            get
             {
                 return indexString;
             }
-            set 
-            { 
-                indexString = value; 
+            set
+            {
+                indexString = value;
             }
         }
 
@@ -206,7 +206,7 @@ namespace RenameTool
 
         private void ItemInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Parent) && Parent!=null) IndexString = Parent.IndexString + "." + (IsFile?"fi":"fo") + Parent.Childs.Count();
+            if (e.PropertyName == nameof(Parent) && Parent != null) IndexString = Parent.IndexString + "." + (IsFile ? "fi" : "fo") + Parent.Childs.Count();
         }
 
         public ItemInfo(DirectoryInfo directoryInfo)
@@ -222,28 +222,22 @@ namespace RenameTool
 
         public static ItemInfo CreateItemInfo(string path)
         {
-            if (path == null) return null;
-            var fa = System.IO.File.GetAttributes(path);
-            if ((fa & FileAttributes.Directory) != FileAttributes.Directory)
+            if (File.Exists(path) || Directory.Exists(path))
             {
-                FileInfo fi = new FileInfo(path);
-                return new ItemInfo(fi);
+                var fa = System.IO.File.GetAttributes(path);
+                if ((fa & FileAttributes.Directory) != FileAttributes.Directory)
+                {
+                    FileInfo fi = new FileInfo(path);
+                    return new ItemInfo(fi);
+                }
+                else
+                {
+                    DirectoryInfo di = new DirectoryInfo(path);
+                    return new ItemInfo(di);
+                }
             }
-            else
-            {
-                DirectoryInfo di = new DirectoryInfo(path);
-                return new ItemInfo(di);
-            }
+            return null;
         }
 
-        public int CompareTo(object? obj)
-        {
-            var o = (ItemInfo)obj;
-            if (o.Location == Location)
-            {
-                return IsFile.CompareTo(o.IsFile);
-            }
-            return Location.CompareTo(o.Location);
-        }
     }
 }
