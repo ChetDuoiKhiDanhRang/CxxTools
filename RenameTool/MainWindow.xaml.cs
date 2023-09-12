@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +30,7 @@ namespace RenameTool
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged, IDataErrorInfo
     {
         public MainWindow()
         {
@@ -38,19 +39,15 @@ namespace RenameTool
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Items = new Dictionary<string, ItemInfo>();
-            PropertyChanged += OnPropertyChanged;
-
-            LoadSettings();
-
             this.DataContext = this;
 
+            PropertyChanged += OnPropertyChanged;
+            
+            LoadSettings();
 
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
 
-
-            //dpOptions.DataContext = this;
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -69,9 +66,14 @@ namespace RenameTool
             {
                 Items = GenerateItemsSource(DroppedItems);
                 GenerateNewName(Items);
-
-
             }
+
+            var b1 = Validation.GetHasError(txbPattern);
+            var b2 = Validation.GetHasError(txbReplaceWith);
+
+            btnApply.IsEnabled = (!b1) && (!b2);
+            btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
+            btnApply.InvalidateVisual();
 
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
@@ -130,12 +132,14 @@ namespace RenameTool
 
         private void GenerateNewName(List<KeyValuePair<string, ItemInfo>> items)
         {
-            if (RegexPattern == "") return;
+            if (RegexPattern == "" ||
+                this[nameof(ReplaceWith)].Length > 0)
+                return;
             foreach (var item in items)
             {
                 string targetName = IncludeExtension ? item.Value.Name : item.Value.NameWithoutExtension;
 
-                if (UseRegex)
+                if (UseRegex && (RegexPattern != "^") && (RegexPattern != "$"))
                 {
                     Regex regex = new Regex(RegexPattern, CaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 
@@ -143,6 +147,14 @@ namespace RenameTool
                     {
                         targetName = targetName.Replace(match.Value, ReplaceWith);
                     }
+                }
+                else if (RegexPattern == "^")
+                {
+                    targetName = ReplaceWith + targetName;
+                }
+                else if (RegexPattern == "$")
+                {
+                    targetName = targetName + ReplaceWith;
                 }
                 else
                 {
@@ -210,13 +222,16 @@ namespace RenameTool
             {
                 try
                 {
-                    if (UseRegex) { Regex regex = new Regex(value); }
+                    if (UseRegex && (value != "^") && (value != "$"))
+                    {
+                        Regex regex = new Regex(value);
+                    }
                     regexPattern = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
                 }
                 catch (Exception ex)
                 {
-                    throw new ArgumentException("Wrong regex pattern");
+                    throw new ArgumentException("Wrong regex pattern!\n" + ex.Message);
                 }
             }
         }
@@ -292,14 +307,39 @@ namespace RenameTool
             }
         }
 
+        public string Error => string.Empty;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string result = "";
+                
+                if (columnName == nameof(ReplaceWith))
+                {
+                    string invalidChar = string.Join("", System.IO.Path.GetInvalidFileNameChars());
+                    var invalidchars = "";
+                    foreach (var c in invalidChar)
+                    {
+                        if (ReplaceWith.IndexOf(c) >= 0)
+                        {
+                            invalidchars += c;
+                        }
+                    }
+
+                    return result = invalidchars.Length > 0 ? ("Invalid char: '" + invalidchars + "'") : "";
+                }
+                return result;
+            }
+        }
 
         List<KeyValuePair<string, ItemInfo>> items = new List<KeyValuePair<string, ItemInfo>>();
 
         bool useRegex = true;
 
-        private string regexPattern;
+        private string regexPattern ="";
 
-        private string replaceWith;
+        private string replaceWith ="";
 
         bool caseSensitive = true;
 
@@ -338,6 +378,29 @@ namespace RenameTool
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             SaveSettings();
+        }
+
+        private void ckbCheckAll_Checked(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in Items)
+            {
+                item.Value.WillBeRename = true;
+            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WillBeRename"));
+        }
+
+        private void ckbCheckAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in Items)
+            {
+                item.Value.WillBeRename = false;
+            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WillBeRename"));
+        }
+
+        private void btnApply_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("ENABLE!");
         }
     }
 }

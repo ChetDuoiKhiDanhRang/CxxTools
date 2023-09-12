@@ -24,6 +24,66 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="5">
+        <Grid.Resources>
+            <Style x:Key="invalidateFileNameTextBox" TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="Validation.ErrorTemplate">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <DockPanel>
+                                        <TextBlock 
+                                                Text=""    
+                                                DockPanel.Dock="Right"
+                                                VerticalAlignment="Center"
+                                                FontWeight="Bold"
+                                                Foreground="Red"
+                                                ToolTip="{Binding ElementName=adornedTextBox,
+                                                Path=(Validation.Errors)/ErrorContent}"
+                                                />
+                                        <AdornedElementPlaceholder
+                                                x:Name="adornedTextBox"/>
+                                    </DockPanel>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Foreground" Value="Red"/>
+                        <Setter 
+                                Property="ToolTip" 
+                                Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                Path=(Validation.Errors)/ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="invalidateRegexTextBox" TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter 
+                            Property="ToolTip" 
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                            Path=(Validation.Errors)/ErrorContent}">
+                        </Setter>
+                        <Setter Property="Foreground" Value="Red"/>
+                        <Setter Property="Validation.ErrorTemplate">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <DockPanel>
+                                        <TextBlock
+                                            Text=""
+                                            ToolTip="{Binding ElementName=invalidTextBox,
+                                            Path=(Validation.Errors)/ErrorContent}"
+                                            />
+                                        <AdornedElementPlaceholder x:Name="invalidTextBox"/>
+                                    </DockPanel>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="160"/>
             <RowDefinition Height="1"/>
@@ -36,7 +96,7 @@
             <GridSplitter.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="Transparent" Offset="0"/>
-                    <GradientStop Color="DarkRed" Offset="0.5"/>
+                    <GradientStop Color="DarkGray" Offset="0.5"/>
                     <GradientStop Color="Transparent" Offset="1"/>
                 </LinearGradientBrush>
             </GridSplitter.Background>
@@ -48,46 +108,25 @@
             BorderThickness="1"
             CornerRadius="3"
             >
-            <Border.Resources>
-                <Style x:Key="invalidateRegexTextBox" TargetType="TextBox">
-                    <Style.Triggers>
-                        <Trigger Property="Validation.HasError" Value="True">
-                            <Setter 
-                                Property="ToolTip" 
-                                Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
-                                Path=(Validation.Errors)/ErrorContent}">
-                            </Setter>
-                            <Setter Property="Foreground" Value="Red"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-
-                <Style x:Key="invalidateFileNameTextBox" TargetType="TextBox">
-                    <Style.Triggers>
-                        <Trigger Property="Validation.HasError" Value="True">
-                            
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-                
-            </Border.Resources>
             <DockPanel LastChildFill="True">
                 <Label 
                     DockPanel.Dock="Left"
                     Content="Search:"
                     Foreground="WhiteSmoke"
                     Width="{Binding ElementName=lbl, Path=ActualWidth}"
-                />
+                    />
                 <TextBox
                     x:Name="txbPattern"
                     Margin="0,1,1,1"
                     Style="{StaticResource invalidateRegexTextBox}"
                     Text="{Binding RegexPattern, 
                     UpdateSourceTrigger=PropertyChanged,
-                    ValidatesOnExceptions=True}"
+                    ValidatesOnDataErrors=True,
+                    NotifyOnValidationError=True}"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
-                    BorderBrush="Transparent"/>
+                    BorderBrush="Transparent"
+                    />
 
             </DockPanel>
         </Border>
@@ -109,8 +148,11 @@
                 />
                 <TextBox
                     x:Name="txbReplaceWith"
+                    Style="{StaticResource invalidateFileNameTextBox}"
                     Text="{Binding ReplaceWith, 
-                    UpdateSourceTrigger=PropertyChanged}"
+                    UpdateSourceTrigger=PropertyChanged,
+                    ValidatesOnDataErrors=True,
+                    NotifyOnValidationError=True}"
                     Margin="0,1,1,1"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
@@ -164,12 +206,27 @@
             </StackPanel>
 
 
-            <TextBox
-                x:Name="txbLog"
+            <Border 
                 Margin="24,0,0,0"
-                IsReadOnly="True"
-                Background="#22000000"
-                />
+                BorderThickness="2" 
+                BorderBrush="#EE005A9E"
+                CornerRadius="3"
+                >
+                <Border.Resources>
+                    <local:Bool2Brush x:Key="IsEnableToColor"/>
+                </Border.Resources>
+                <Button
+                    x:Name="btnApply"
+                    VerticalAlignment="Stretch"
+                    Content="Apply!"
+                    FontWeight="Bold"
+                    Foreground="#EE005A9E"
+                    BorderBrush="Transparent"
+                    Background="Transparent"
+                    Click="btnApply_Click"
+                    >
+                </Button>
+            </Border>
         </DockPanel>
 
         <ListView 
@@ -180,7 +237,16 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header=" ">
+                        <GridViewColumn>
+                            <GridViewColumn.Header>
+                                <CheckBox
+                                    Content="All" 
+                                    x:Name="ckbCheckAll" 
+                                    IsChecked="{x:Null}"
+                                    Checked="ckbCheckAll_Checked"
+                                    Unchecked="ckbCheckAll_Unchecked"
+                                    />
+                            </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox 
