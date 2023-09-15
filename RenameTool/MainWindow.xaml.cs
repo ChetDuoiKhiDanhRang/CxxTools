@@ -70,8 +70,8 @@ namespace RenameTool
                 GenerateNewName(Items);
             }
 
-            var b1 = Validation.GetHasError(txbPattern);
-            var b2 = Validation.GetHasError(txbReplaceWith);
+            //var b1 = Validation.GetHasError(txbPattern);
+            //var b2 = Validation.GetHasError(txbReplaceWith);
 
             btnApply.IsEnabled = !(this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0);
             btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
