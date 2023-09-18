@@ -141,32 +141,37 @@ namespace RenameTool
                 return;
             foreach (var item in items)
             {
-                string targetName = IncludeExtension ? item.Value.Name : item.Value.NameWithoutExtension;
-
-                if (UseRegex && (RegexPattern != "^") && (RegexPattern != "$"))
+                Thread thread = new Thread((i) =>
                 {
-                    Regex regex = new Regex(RegexPattern, CaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+                    var objItem = (KeyValuePair<String, ItemInfo>)i;
+                    string targetName = IncludeExtension ? objItem.Value.Name : objItem.Value.NameWithoutExtension;
 
-                    foreach (Match match in regex.Matches(targetName))
+                    if (UseRegex && (RegexPattern != "^") && (RegexPattern != "$"))
                     {
-                        targetName = targetName.Replace(match.Value, ReplaceWith);
+                        Regex regex = new Regex(RegexPattern, CaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+
+                        foreach (Match match in regex.Matches(targetName))
+                        {
+                            targetName = targetName.Replace(match.Value, ReplaceWith);
+                        }
                     }
-                }
-                else if (RegexPattern == "^")
-                {
-                    targetName = ReplaceWith + targetName;
-                }
-                else if (RegexPattern == "$")
-                {
-                    targetName = targetName + ReplaceWith;
-                }
-                else
-                {
-                    targetName = targetName.Replace(RegexPattern, ReplaceWith, CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
-                }
-                item.Value.NewName = IncludeExtension ? targetName : (targetName + item.Value.Extension);
-                if (TitleCase) { item.Value.NewName = StringHandler.Proper(item.Value.NewName); }
-                if (ToTiengVietKhongDau) { item.Value.NewName = StringHandler.TiengVietKhongDau(item.Value.NewName); }
+                    else if (RegexPattern == "^")
+                    {
+                        targetName = ReplaceWith + targetName;
+                    }
+                    else if (RegexPattern == "$")
+                    {
+                        targetName = targetName + ReplaceWith;
+                    }
+                    else
+                    {
+                        targetName = targetName.Replace(RegexPattern, ReplaceWith, CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
+                    }
+                    objItem.Value.NewName = IncludeExtension ? targetName : (targetName + objItem.Value.Extension);
+                    if (TitleCase) { objItem.Value.NewName = StringHandler.Proper(objItem.Value.NewName); }
+                    if (ToTiengVietKhongDau) { objItem.Value.NewName = StringHandler.TiengVietKhongDau(objItem.Value.NewName); }
+                });
+                thread.Start(item);
             }
         }
 
@@ -448,6 +453,7 @@ namespace RenameTool
                 var dirInfo = new DirectoryInfo(folder.Value.FullName);
                 if (dirInfo.Exists)
                 {
+
                     if (!(string.Compare(folder.Value.Name, (folder.Value.NewName), true) == 0))
                     {
                         try
@@ -467,7 +473,11 @@ namespace RenameTool
                     }
                     foreach (var item in DroppedItems)
                     {
-                        if (item == folder.Key) { newDroppedItems.Add((folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName)); break; }
+                        if (item.Replace(@"\\", @"\") == folder.Key)
+                        {
+                            newDroppedItems.Add((folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName).Replace(@"\\", @"\"));
+                            break;
+                        }
                     }
                 }
             }
