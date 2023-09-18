@@ -31,19 +31,19 @@
                         <Setter Property="Validation.ErrorTemplate">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <DockPanel>
+                                    <Grid>
                                         <TextBlock 
-                                                Text=""    
-                                                DockPanel.Dock="Right"
+                                                HorizontalAlignment="Right"
                                                 VerticalAlignment="Center"
-                                                FontWeight="Bold"
+                                                FontWeight="Normal"
+                                                FontStyle="Italic"
                                                 Foreground="Red"
-                                                ToolTip="{Binding ElementName=adornedTextBox,
-                                                Path=(Validation.Errors)/ErrorContent}"
+                                                ToolTip="{Binding ElementName=adornedTextBox, Path=(Validation.Errors)/ErrorContent}"
+                                                Text="{Binding ElementName=adornedTextBox, Path=(Validation.Errors)/ErrorContent}"
                                                 />
                                         <AdornedElementPlaceholder
                                                 x:Name="adornedTextBox"/>
-                                    </DockPanel>
+                                    </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
