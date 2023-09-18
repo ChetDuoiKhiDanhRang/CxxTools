@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RenameTool"
         mc:Ignorable="d"
-        Title="RenameTool" Height="450" Width="800"
+        Title="RenameTool" Height="550" Width="800"
         Icon="{StaticResource WindowsIcon}"
         FontFamily="Segoe UI"
         FontSize="13"
@@ -32,22 +32,23 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <Grid>
+                                        <AdornedElementPlaceholder x:Name="adornedTextBox"/>
                                         <TextBlock 
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center"
-                                                FontWeight="Normal"
-                                                FontStyle="Italic"
-                                                Foreground="Red"
-                                                ToolTip="{Binding ElementName=adornedTextBox, Path=(Validation.Errors)/ErrorContent}"
-                                                Text="{Binding ElementName=adornedTextBox, Path=(Validation.Errors)/ErrorContent}"
-                                                />
-                                        <AdornedElementPlaceholder
-                                                x:Name="adornedTextBox"/>
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Foreground="{StaticResource ErrorColor}"
+                                            Text="Error!">
+                                            <TextBlock.Margin>
+                                                <Thickness>
+                                                    <Thickness.Right> 4 </Thickness.Right>
+                                                </Thickness>
+                                            </TextBlock.Margin>
+                                        </TextBlock>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                        <Setter Property="Foreground" Value="Red"/>
+                        <Setter Property="Foreground" Value="{StaticResource ErrorColor}"/>
                         <Setter 
                                 Property="ToolTip" 
                                 Value="{Binding RelativeSource={x:Static RelativeSource.Self},
@@ -64,18 +65,25 @@
                             Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
                             Path=(Validation.Errors)/ErrorContent}">
                         </Setter>
-                        <Setter Property="Foreground" Value="Red"/>
+                        <Setter Property="Foreground" Value="{StaticResource ErrorColor}"/>
                         <Setter Property="Validation.ErrorTemplate">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <DockPanel>
+                                    <Grid>
                                         <TextBlock
-                                            Text=""
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Text="Error!"
+                                            Foreground="{StaticResource ErrorColor}"
                                             ToolTip="{Binding ElementName=invalidTextBox,
                                             Path=(Validation.Errors)/ErrorContent}"
-                                            />
+                                            >
+                                            <TextBlock.Margin>
+                                                <Thickness Right="4"/>
+                                            </TextBlock.Margin>
+                                        </TextBlock>
                                         <AdornedElementPlaceholder x:Name="invalidTextBox"/>
-                                    </DockPanel>
+                                    </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -85,7 +93,7 @@
 
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="135"/>
+            <RowDefinition Height="140"/>
             <RowDefinition Height="1"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -112,6 +120,7 @@
                 <Label 
                     DockPanel.Dock="Left"
                     Content="Search:"
+                    Margin="3"
                     Foreground="WhiteSmoke"
                     Width="{Binding ElementName=lbl, Path=ActualWidth}"
                     />
@@ -133,7 +142,7 @@
 
         <Border
             Grid.Row="0"
-            Margin="0,35,0,0"
+            Margin="0,40,0,0"
             VerticalAlignment="Top"
             Background="#005A9E"
             BorderThickness="1"
@@ -142,6 +151,7 @@
             <DockPanel>
                 <Label 
                     x:Name="lbl"
+                    Margin="3"
                     DockPanel.Dock="Left"
                     Content="Repalce with:"
                     Foreground="WhiteSmoke"
@@ -165,7 +175,7 @@
             x:Name="dpOptions"
             Grid.Row="0"
             VerticalAlignment="Top"
-            Margin="0,75,0,0"
+            Margin="0,85,0,0"
             >
             <StackPanel DockPanel.Dock="Left">
                 <CheckBox x:Name="ckbRegex" 
