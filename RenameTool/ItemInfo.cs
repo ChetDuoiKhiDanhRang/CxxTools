@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RenameTool
 {
-    public class ItemInfo//: INotifyPropertyChanged
+    public class ItemInfo: INotifyPropertyChanged
     {
 
         private string nameWithoutExtension;

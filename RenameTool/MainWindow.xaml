@@ -40,7 +40,7 @@
                                             Text="Error!">
                                             <TextBlock.Margin>
                                                 <Thickness>
-                                                    <Thickness.Right> 4 </Thickness.Right>
+                                                    <Thickness.Right>4</Thickness.Right>
                                                 </Thickness>
                                             </TextBlock.Margin>
                                         </TextBlock>
@@ -238,8 +238,10 @@
 
         <ListView 
             x:Name="lscItems"
-            Margin="0,15,0,0"
+            Margin="0,15,0,35"
             Grid.Row="2"
+            BorderThickness="2"
+            BorderBrush="#005A9E"
             >
             <ListView.View>
                 <GridView>
@@ -300,5 +302,16 @@
             </ListView.ItemContainerStyle>
         </ListView>
 
+        <Border 
+            BorderBrush="#005A9E"
+            BorderThickness="2"
+            Background="WhiteSmoke" Grid.Row="2" VerticalAlignment="Bottom">
+            <DockPanel Margin="0,4,0,4"  >
+                <Image Source="{StaticResource FileIcon}" MaxHeight="16" Margin="0,0,2,0" DockPanel.Dock="Left"/>
+                <TextBlock Text="{Binding FilesCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                <Image Source="{StaticResource FolderIcon}" MaxHeight="16" Margin="8,0,2,0" DockPanel.Dock="Left"/>
+                <TextBlock Text="{Binding FoldersCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>

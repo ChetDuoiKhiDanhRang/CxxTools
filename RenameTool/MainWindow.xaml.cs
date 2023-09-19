@@ -43,31 +43,40 @@ namespace RenameTool
         {
             this.DataContext = this;
 
-            PropertyChanged += OnPropertyChanged;
+            //PropertyChanged += OnPropertyChanged;
 
             LoadSettings();
 
-            lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
-
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(RegexPattern) ||
-                e.PropertyName == nameof(IncludeExtension) ||
-                e.PropertyName == nameof(TitleCase) ||
-                e.PropertyName == nameof(CaseSensitive) ||
-                e.PropertyName == nameof(ReplaceWith) ||
-                e.PropertyName == nameof(ToTiengVietKhongDau))
-            {
-                GenerateNewName(Items);
-            }
-
-            if (e.PropertyName == nameof(IncludeFilesAndSubFolders))
+            if (e.PropertyName == nameof(IncludeFilesAndSubFolders) ||
+                e.PropertyName == nameof(DroppedItems))
             {
                 Items = GenerateItemsSource(DroppedItems);
                 GenerateNewName(Items);
+                lscItems.Dispatcher.Invoke(() => { lscItems.ItemsSource = null; lscItems.ItemsSource = Items; });
+            }
+
+            if (e.PropertyName == nameof(UseRegex) ||
+                e.PropertyName == nameof(CaseSensitive) ||
+                e.PropertyName == nameof(TitleCase) ||
+                e.PropertyName == nameof(IncludeExtension) ||
+                e.PropertyName == nameof(ToTiengVietKhongDau) ||
+                e.PropertyName == nameof(ReplaceWith) ||
+                e.PropertyName == nameof(RegexPattern)
+                )
+            {
+                GenerateNewName(Items);
+                lscItems.Dispatcher.Invoke(() => { lscItems.ItemsSource = null; lscItems.ItemsSource = Items; });
+            }
+
+            if (e.PropertyName == nameof(Items))
+            {
+                FilesCount = Items.Where(x => x.Value.IsFile).Count().ToString();
+                FoldersCount = Items.Where(x => !x.Value.IsFile).Count().ToString();
             }
 
             btnApply.Dispatcher.Invoke(new Action(() =>
@@ -75,10 +84,6 @@ namespace RenameTool
                 btnApply.IsEnabled = !(this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0);
                 btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
             }));
-
-
-            lscItems.Dispatcher.Invoke(() => { lscItems.ItemsSource = null; lscItems.ItemsSource = Items; });
-
         }
 
         private ObservableCollection<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> files)
@@ -139,13 +144,13 @@ namespace RenameTool
                 this[nameof(ReplaceWith)].Length > 0 ||
                 this[nameof(RegexPattern)].Length > 0 ||
                 items.Count == 0
-                    )
+               )
                 return;
-            List<Task> tasks = new List<Task>();
             foreach (var item in items)
             {
-                tasks.Add(Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
+
                     string targetName = IncludeExtension ? item.Value.Name : item.Value.NameWithoutExtension;
 
                     if (UseRegex && (RegexPattern != "^") && (RegexPattern != "$"))
@@ -172,7 +177,7 @@ namespace RenameTool
                     item.Value.NewName = IncludeExtension ? targetName : (targetName + item.Value.Extension);
                     if (TitleCase) { item.Value.NewName = StringHandler.Proper(item.Value.NewName); }
                     if (ToTiengVietKhongDau) { item.Value.NewName = StringHandler.TiengVietKhongDau(item.Value.NewName); }
-                }));
+                });
             }
 
         }
@@ -206,104 +211,141 @@ namespace RenameTool
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ObservableCollection<KeyValuePair<string, ItemInfo>> Items
-        {
-            get => items;
-            set
-            {
-                items = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
-            }
-        }
 
+        bool useRegex = true;
         public bool UseRegex
         {
             get => useRegex;
             set
             {
                 useRegex = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UseRegex)));
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(UseRegex)));
             }
         }
 
+        private string regexPattern = "";
         public string RegexPattern
         {
             get { return regexPattern; }
             set
             {
                 regexPattern = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RegexPattern"));
+                OnPropertyChanged(this, new PropertyChangedEventArgs("RegexPattern"));
             }
         }
 
+        private string replaceWith = "";
         public string ReplaceWith
         {
             get { return replaceWith; }
             set
             {
                 replaceWith = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReplaceWith"));
+                OnPropertyChanged(this, new PropertyChangedEventArgs("ReplaceWith"));
             }
         }
 
+        bool caseSensitive = true;
         public bool CaseSensitive
         {
             get => caseSensitive;
             set
             {
                 caseSensitive = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CaseSensitive)));
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(CaseSensitive)));
             }
         }
 
+        bool titleCase = true;
         public bool TitleCase
         {
             get => titleCase;
             set
             {
                 titleCase = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TitleCase)));
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(TitleCase)));
             }
         }
 
+        bool includeExtension = true;
         public bool IncludeExtension
         {
             get => includeExtension;
             set
             {
                 includeExtension = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeExtension)));
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(IncludeExtension)));
             }
         }
 
+        bool includeFilesAndSubFolders = true;
         public bool IncludeFilesAndSubFolders
         {
             get => includeFilesAndSubFolders;
             set
             {
                 includeFilesAndSubFolders = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IncludeFilesAndSubFolders)));
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(IncludeFilesAndSubFolders)));
             }
         }
 
+        bool toTiengVietKhongDau = true;
         public bool ToTiengVietKhongDau
         {
             get => toTiengVietKhongDau;
             set
             {
                 toTiengVietKhongDau = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToTiengVietKhongDau)));
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(ToTiengVietKhongDau)));
             }
         }
 
         //store dropped items
+        List<string> droppedItems = new List<string>();
         public List<string> DroppedItems
         {
             get => droppedItems;
             set
             {
                 droppedItems = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
+            }
+        }
+
+        ObservableCollection<KeyValuePair<string, ItemInfo>> items = new ObservableCollection<KeyValuePair<string, ItemInfo>>();
+        public ObservableCollection<KeyValuePair<string, ItemInfo>> Items
+        {
+            get => items;
+            set
+            {
+                items = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(Items)));
+            }
+        }
+
+        private string filesCount;
+
+        public string FilesCount
+        {
+            get { return filesCount; }
+            set
+            {
+                filesCount = value;
+                //OnPropertyChanged(this, new PropertyChangedEventArgs(nameof (FilesCount)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof (FilesCount)));
+            }
+        }
+
+        private string foldersCount;
+
+        public string FoldersCount
+        {
+            get { return foldersCount; }
+            set
+            {
+                foldersCount = value;
+                //OnPropertyChanged(this, new PropertyChangedEventArgs(nameof (FoldersCount)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FoldersCount)));
             }
         }
 
@@ -351,30 +393,11 @@ namespace RenameTool
             }
         }
 
-        ObservableCollection<KeyValuePair<string, ItemInfo>> items = new ObservableCollection<KeyValuePair<string, ItemInfo>>();
-
-        bool useRegex = true;
-
-        private string regexPattern = "";
-
-        private string replaceWith = "";
-
-        bool caseSensitive = true;
-
-        bool titleCase = true;
-
-        bool includeExtension = true;
-
-        bool includeFilesAndSubFolders = true;
-
-        bool toTiengVietKhongDau = true;
-
-        List<string> droppedItems = new List<string>();
-
         private void Window_DragEnter(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.Copy;
         }
+
         private void Window_Drop(object sender, DragEventArgs e)
         {
             List<string> files = ((IEnumerable<string>)e.Data.GetData(DataFormats.FileDrop)).ToList();
@@ -383,14 +406,15 @@ namespace RenameTool
 
             files.Sort();
 
-            DroppedItems.Clear();
-            DroppedItems.AddRange(files);
-            Items = GenerateItemsSource(DroppedItems);
-            GenerateNewName(Items);
+            DroppedItems = files;
+            //DroppedItems.Clear();
+            //DroppedItems.AddRange(files);
+            //Items = GenerateItemsSource(DroppedItems);
+            //GenerateNewName(Items);
 
 
-            lscItems.ItemsSource = null;
-            lscItems.ItemsSource = Items;
+            //lscItems.ItemsSource = null;
+            //lscItems.ItemsSource = Items;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -485,12 +509,12 @@ namespace RenameTool
             }
 
             DroppedItems.Clear();
-            DroppedItems.AddRange(newDroppedItems);
+            DroppedItems = newDroppedItems;
 
 
-            Items.Clear();
-            Items = GenerateItemsSource(DroppedItems);
-            GenerateNewName(Items);
+            //Items.Clear();
+            //Items = GenerateItemsSource(DroppedItems);
+            //GenerateNewName(Items);
 
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
