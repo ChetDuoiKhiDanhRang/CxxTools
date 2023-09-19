@@ -70,18 +70,18 @@ namespace RenameTool
                 GenerateNewName(Items);
             }
 
-            //var b1 = Validation.GetHasError(txbPattern);
-            //var b2 = Validation.GetHasError(txbReplaceWith);
+            btnApply.Dispatcher.Invoke(new Action(() =>
+            {
+                btnApply.IsEnabled = !(this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0);
+                btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
+            }));
 
-            btnApply.IsEnabled = !(this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0);
-            btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
-            btnApply.InvalidateVisual();
 
-            lscItems.ItemsSource = null;
-            lscItems.ItemsSource = Items;
+            lscItems.Dispatcher.Invoke(() => { lscItems.ItemsSource = null; lscItems.ItemsSource = Items; });
+
         }
 
-        private List<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> files)
+        private ObservableCollection<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> files)
         {
             var Items = new Dictionary<string, ItemInfo>();
             int count = 0;
@@ -128,23 +128,25 @@ namespace RenameTool
                     }
                 }
             }
-            var result = Items.OrderBy(k => k.Value.IndexString).ToList();
+            ObservableCollection<KeyValuePair<string, ItemInfo>> result = new ObservableCollection<KeyValuePair<string, ItemInfo>>(Items.OrderBy(k => k.Value.IndexString));
+
             return result;
         }
 
-        private void GenerateNewName(List<KeyValuePair<string, ItemInfo>> items)
+        private void GenerateNewName(ObservableCollection<KeyValuePair<string, ItemInfo>> items)
         {
             if (RegexPattern == "" ||
                 this[nameof(ReplaceWith)].Length > 0 ||
-                this[nameof(RegexPattern)].Length > 0
+                this[nameof(RegexPattern)].Length > 0 ||
+                items.Count == 0
                     )
                 return;
+            List<Task> tasks = new List<Task>();
             foreach (var item in items)
             {
-                Thread thread = new Thread((i) =>
+                tasks.Add(Task.Factory.StartNew(() =>
                 {
-                    var objItem = (KeyValuePair<String, ItemInfo>)i;
-                    string targetName = IncludeExtension ? objItem.Value.Name : objItem.Value.NameWithoutExtension;
+                    string targetName = IncludeExtension ? item.Value.Name : item.Value.NameWithoutExtension;
 
                     if (UseRegex && (RegexPattern != "^") && (RegexPattern != "$"))
                     {
@@ -167,12 +169,12 @@ namespace RenameTool
                     {
                         targetName = targetName.Replace(RegexPattern, ReplaceWith, CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
                     }
-                    objItem.Value.NewName = IncludeExtension ? targetName : (targetName + objItem.Value.Extension);
-                    if (TitleCase) { objItem.Value.NewName = StringHandler.Proper(objItem.Value.NewName); }
-                    if (ToTiengVietKhongDau) { objItem.Value.NewName = StringHandler.TiengVietKhongDau(objItem.Value.NewName); }
-                });
-                thread.Start(item);
+                    item.Value.NewName = IncludeExtension ? targetName : (targetName + item.Value.Extension);
+                    if (TitleCase) { item.Value.NewName = StringHandler.Proper(item.Value.NewName); }
+                    if (ToTiengVietKhongDau) { item.Value.NewName = StringHandler.TiengVietKhongDau(item.Value.NewName); }
+                }));
             }
+
         }
 
         private void LoadSettings()
@@ -204,7 +206,7 @@ namespace RenameTool
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public List<KeyValuePair<string, ItemInfo>> Items
+        public ObservableCollection<KeyValuePair<string, ItemInfo>> Items
         {
             get => items;
             set
@@ -349,7 +351,7 @@ namespace RenameTool
             }
         }
 
-        List<KeyValuePair<string, ItemInfo>> items = new List<KeyValuePair<string, ItemInfo>>();
+        ObservableCollection<KeyValuePair<string, ItemInfo>> items = new ObservableCollection<KeyValuePair<string, ItemInfo>>();
 
         bool useRegex = true;
 
