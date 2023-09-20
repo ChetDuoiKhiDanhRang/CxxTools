@@ -22,6 +22,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -445,9 +446,17 @@ namespace RenameTool
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
-            var process = Process.GetProcesses(Environment.MachineName).Where(p => p.ProcessName.Contains("explorer", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            //Items.Clear();
+            //Items = GenerateItemsSource(DroppedItems);
+            //GenerateNewName(Items);
 
+            lscItems.ItemsSource = null;
+            lscItems.ItemsSource = Items;
             
+        }
+
+        private void ApplyNewName()
+        {
             var RenameList = Items.Where(x => x.Value.WillBeRename).ToList();
             if (!RenameList.Any()) return;
 
@@ -516,15 +525,6 @@ namespace RenameTool
 
             DroppedItems.Clear();
             DroppedItems = newDroppedItems;
-
-
-            //Items.Clear();
-            //Items = GenerateItemsSource(DroppedItems);
-            //GenerateNewName(Items);
-
-            lscItems.ItemsSource = null;
-            lscItems.ItemsSource = Items;
-            
         }
     }
 }
