@@ -305,12 +305,19 @@
         <Border 
             BorderBrush="#005A9E"
             BorderThickness="2"
+            CornerRadius="3"
             Background="WhiteSmoke" Grid.Row="2" VerticalAlignment="Bottom">
-            <DockPanel Margin="0,4,0,4"  >
-                <Image Source="{StaticResource FileIcon}" MaxHeight="16" Margin="0,0,2,0" DockPanel.Dock="Left"/>
-                <TextBlock Text="{Binding FilesCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+            <DockPanel Margin="0,4,0,4" >
+                <Image Source="{StaticResource FileIcon}" MaxHeight="16" Margin="2,0,2,0" DockPanel.Dock="Left"/>
+                <TextBlock Text="{Binding FilesCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" FontSize="11" VerticalAlignment="Center"/>
                 <Image Source="{StaticResource FolderIcon}" MaxHeight="16" Margin="8,0,2,0" DockPanel.Dock="Left"/>
-                <TextBlock Text="{Binding FoldersCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding FoldersCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" FontSize="11" VerticalAlignment="Center"/>
+                <TextBlock x:Name="lblVer"
+                       FontSize="11" 
+                       FontStyle="Italic"
+                       Foreground="#005A9E"
+                       HorizontalAlignment="Center"
+                       />
             </DockPanel>
         </Border>
     </Grid>

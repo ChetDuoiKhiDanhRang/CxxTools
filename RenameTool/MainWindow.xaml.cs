@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -48,6 +50,7 @@ namespace RenameTool
             LoadSettings();
 
             lscItems.ItemsSource = Items;
+            lblVer.Text = "App version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +"; Framework: "+ AppContext.TargetFrameworkName;
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -86,7 +89,7 @@ namespace RenameTool
             }));
         }
 
-        private ObservableCollection<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> files)
+        private List<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> files)
         {
             var Items = new Dictionary<string, ItemInfo>();
             int count = 0;
@@ -133,12 +136,12 @@ namespace RenameTool
                     }
                 }
             }
-            ObservableCollection<KeyValuePair<string, ItemInfo>> result = new ObservableCollection<KeyValuePair<string, ItemInfo>>(Items.OrderBy(k => k.Value.IndexString));
+            var result = new List<KeyValuePair<string, ItemInfo>>(Items.OrderBy(k => k.Value.IndexString));
 
             return result;
         }
 
-        private void GenerateNewName(ObservableCollection<KeyValuePair<string, ItemInfo>> items)
+        private void GenerateNewName(List<KeyValuePair<string, ItemInfo>> items)
         {
             if (RegexPattern == "" ||
                 this[nameof(ReplaceWith)].Length > 0 ||
@@ -312,8 +315,8 @@ namespace RenameTool
             }
         }
 
-        ObservableCollection<KeyValuePair<string, ItemInfo>> items = new ObservableCollection<KeyValuePair<string, ItemInfo>>();
-        public ObservableCollection<KeyValuePair<string, ItemInfo>> Items
+        List<KeyValuePair<string, ItemInfo>> items = new List<KeyValuePair<string, ItemInfo>>();
+        public List<KeyValuePair<string, ItemInfo>> Items
         {
             get => items;
             set
@@ -442,6 +445,9 @@ namespace RenameTool
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
+            var process = Process.GetProcesses(Environment.MachineName).Where(p => p.ProcessName.Contains("explorer", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+            
             var RenameList = Items.Where(x => x.Value.WillBeRename).ToList();
             if (!RenameList.Any()) return;
 
@@ -518,7 +524,7 @@ namespace RenameTool
 
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
-
+            
         }
     }
 }
