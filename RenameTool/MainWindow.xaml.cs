@@ -50,7 +50,7 @@ namespace RenameTool
             LoadSettings();
 
             lscItems.ItemsSource = Items;
-            lblVer.Text = "App version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +"; Framework: "+ AppContext.TargetFrameworkName;
+            lblVer.Text = "App version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "; Framework: " + AppContext.TargetFrameworkName;
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
