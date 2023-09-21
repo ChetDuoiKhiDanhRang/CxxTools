@@ -18,9 +18,12 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows;
+
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -336,7 +339,7 @@ namespace RenameTool
             {
                 filesCount = value;
                 //OnPropertyChanged(this, new PropertyChangedEventArgs(nameof (FilesCount)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof (FilesCount)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilesCount)));
             }
         }
 
@@ -446,13 +449,15 @@ namespace RenameTool
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
+
+            ApplyNewName();
             //Items.Clear();
             //Items = GenerateItemsSource(DroppedItems);
             //GenerateNewName(Items);
 
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
-            
+
         }
 
         private void ApplyNewName()
