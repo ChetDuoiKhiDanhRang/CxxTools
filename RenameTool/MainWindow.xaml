@@ -274,17 +274,21 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Image
-                                            Stretch="UniformToFill"
+                                            Stretch="Uniform"
                                             Margin="{Binding Value, Converter={StaticResource LevelDetermine}}"
-                                            Width="20"
-                                            Height="20"
+                                            Width="16"
+                                            Height="16"
+                                            MaxHeight="16"
+                                            MaxWidth="16"
+
                                             VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
                                             Source="{Binding Value.IsFile,
                                             Converter={StaticResource TypeConverter}}"
                                             ToolTip="{Binding Value,
                                             Converter={StaticResource ItemLocationConverter }}"
                                             />
-                                        <TextBlock Text="{Binding Value.Name}"/>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Value.Name}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
@@ -297,7 +301,7 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
