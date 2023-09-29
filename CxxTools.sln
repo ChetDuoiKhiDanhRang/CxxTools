@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegexChecking", "RegexCheck
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnviromentVariables", "EnviromentVariables\EnviromentVariables.csproj", "{6A534D32-F733-4F15-A0EC-FBBE57F411A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenameTool", "RenameTool\RenameTool.csproj", "{868B7F5B-6A70-49A8-B7EE-69DE732AC7A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RenameTool", "RenameTool\RenameTool.csproj", "{868B7F5B-6A70-49A8-B7EE-69DE732AC7A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowAndControl", "WindowAndControl\WindowAndControl.csproj", "{F164E1C7-A360-4DE8-8D1C-2B07C8304256}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,22 @@ Global
 		{868B7F5B-6A70-49A8-B7EE-69DE732AC7A9}.Release|x64.Build.0 = Release|Any CPU
 		{868B7F5B-6A70-49A8-B7EE-69DE732AC7A9}.Release|x86.ActiveCfg = Release|Any CPU
 		{868B7F5B-6A70-49A8-B7EE-69DE732AC7A9}.Release|x86.Build.0 = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|x64.Build.0 = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Debug|x86.Build.0 = Debug|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|ARM64.Build.0 = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|x64.ActiveCfg = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|x64.Build.0 = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|x86.ActiveCfg = Release|Any CPU
+		{F164E1C7-A360-4DE8-8D1C-2B07C8304256}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
