@@ -29,6 +29,8 @@ namespace WindowAndControl
             InitializeComponent();
             timer = new Timer(50);
             timer.Elapsed += Timer_Elapsed;
+            var app = (App)App.Current;
+            App.LogFile = AppContext.BaseDirectory + @"log.txt";
         }
 
         CursorInfo ci;
@@ -57,11 +59,12 @@ namespace WindowAndControl
         {
             if (TimerStarted)
             {
-                timer.Stop();
+                App.UnhookWindowsHookEx();
             }
             else
             {
-                timer.Start();
+                App.StartKeyboardHook((App)App.Current);
+                App.StartMouseUpDownHook((App)App.Current);
             }
             TimerStarted = !TimerStarted;
         }
