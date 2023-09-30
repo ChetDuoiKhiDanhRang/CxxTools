@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -197,7 +199,6 @@ namespace WindowAndControl
             Modifiers = -65536,
         }
 
-
         private const int WH_KEYBOARD_LL = 13;
         private const int WH_MOUSE_LL = 14;
 
@@ -245,9 +246,22 @@ namespace WindowAndControl
                 cbSize = (Int32)(Marshal.SizeOf(typeof(CURSORINFO)));
             }
         }
+        
+        Point mouseUpLocation;
+        Point MouseUpLocation { 
+            get => mouseUpLocation;
+            set
+            {
+                mouseUpLocation = value;
+                MouseUpLocationChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MouseUpLocation)));
+            }
+        }
 
+        App currentApp;
 
+        public event PropertyChangedEventHandler? MouseUpLocationChanged;
 
+        #region Win32 API
         private delegate IntPtr LowLevelProc(int code, IntPtr wParam, IntPtr lParam);
 
 
@@ -271,6 +285,7 @@ namespace WindowAndControl
         static LowLevelProc Mouse_CallbackMethod = Mouse_WriteToLog;
         static IntPtr kb_HookHandle = IntPtr.Zero;
         static IntPtr mouse_HookHandle = IntPtr.Zero;
+        internal static string LogFile;
 
         static IntPtr Keyboard_WriteToLog(int ncode, IntPtr wParam, IntPtr lParam)
         {
@@ -294,6 +309,7 @@ namespace WindowAndControl
                 GetCursorInfo(ref cURSORINFO);
                 if ((int)wParam == WM_LBUTTONUP)
                 {
+                    
                     string content = "Left Mouse Up: " + cURSORINFO.ptScreenPos.x + "/" + cURSORINFO.ptScreenPos.y;
                     Console.WriteLine(content);
                     WriteLog(content);
@@ -353,6 +369,7 @@ namespace WindowAndControl
 
         internal static void StartKeyboardHook()
         {
+            
             kb_HookHandle = SetKeyboardHook(Keyboard_CallbackMethod);
             //app.Run();
             //UnhookWindowsHookEx(kb_HookHandle);
@@ -365,13 +382,12 @@ namespace WindowAndControl
             //UnhookWindowsHookEx(mouse_HookHandle);
         }
 
-        internal static string LogFile;
-
         internal static void UnhookWindowsHookEx()
         {
             UnhookWindowsHookEx(kb_HookHandle);
             UnhookWindowsHookEx(mouse_HookHandle);
         }
+        #endregion
 
     }
 }

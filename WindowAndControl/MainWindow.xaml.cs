@@ -23,22 +23,19 @@ namespace WindowAndControl
     /// </summary>
     public partial class MainWindow : Window
     {
-        Timer timer;
+        App thisApp;
+ 
         public MainWindow()
         {
             InitializeComponent();
-            timer = new Timer(50);
-            timer.Elapsed += Timer_Elapsed;
-            var app = (App)App.Current;
+            thisApp = (App)App.Current;
+            thisApp.MouseUpLocationChanged += ThisApp_MouseUpLocationChanged;
             App.LogFile = AppContext.BaseDirectory + @"log.txt";
         }
 
-        CursorInfo ci;
-
-        private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
+        private void ThisApp_MouseUpLocationChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            ci = BaseTools.WinAPI.GetCursorInfo();
-            txbLocation.Dispatcher.Invoke(() => txbLocation.Text = $"{{{ci.ToString()}}}");
+            
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -49,7 +46,6 @@ namespace WindowAndControl
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             this.Title = "Mouse Up!";
-
         }
 
         public bool TimerStarted { get; set; }
@@ -63,8 +59,8 @@ namespace WindowAndControl
             }
             else
             {
-                App.StartKeyboardHook((App)App.Current);
-                App.StartMouseUpDownHook((App)App.Current);
+                App.StartKeyboardHook();
+                App.StartMouseUpDownHook();
             }
             TimerStarted = !TimerStarted;
         }
