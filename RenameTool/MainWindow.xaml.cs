@@ -499,11 +499,14 @@ namespace RenameTool
 
 
             //List openning window explorer
-            var processExplorer = Process.GetProcessesByName("explorer").FirstOrDefault();
+            var processExplorer = Process.GetProcessesByName("explorer");
             List<WindowInfo> explorerWindows = new List<WindowInfo>();
             if (processExplorer != null)
             {
-                explorerWindows = WinAPI.GetWindowsByProcessID((uint)processExplorer.Id).ToList();
+                foreach (var process in processExplorer)
+                {
+                    explorerWindows.AddRange(WinAPI.GetWindowsByProcessID((uint)process.Id).Where(w => !string.IsNullOrEmpty(w.Title) && w.IsVisible).ToArray());
+                }
             }
 
 
@@ -517,6 +520,7 @@ namespace RenameTool
                     {
                         foreach (var window in explorerWindows)
                         {
+                            string s = GetOpenningAddress(window);
                             while (GetOpenningAddress(window).Contains(folder.Key))
                             {
                                 Up2Parent(window);
