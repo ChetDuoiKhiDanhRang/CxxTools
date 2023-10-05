@@ -524,7 +524,7 @@ namespace RenameTool
                             while (GetOpenningAddress(window).Contains(folder.Key))
                             {
                                 Up2Parent(window);
-                                Thread.Sleep(100);
+                                window.Update();
                             }
                         }
 
@@ -561,8 +561,11 @@ namespace RenameTool
                 }
             }
 
-            DroppedItems.Clear();
-            DroppedItems = newDroppedItems;
+            if (newDroppedItems.Count > 0)
+            {
+                DroppedItems.Clear();
+                DroppedItems = newDroppedItems;
+            }
         }
 
         private string GetOpenningAddress(WindowInfo windowInfo)
