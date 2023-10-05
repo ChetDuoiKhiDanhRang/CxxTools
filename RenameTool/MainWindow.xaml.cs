@@ -520,7 +520,7 @@ namespace RenameTool
                             while (GetOpenningAddress(window).Contains(folder.Key))
                             {
                                 Up2Parent(window);
-                                Thread.Sleep(50);
+                                Thread.Sleep(100);
                             }
                         }
 
