@@ -8,7 +8,7 @@
     <ApplicationIcon>imgs\ico.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <IsPublishable>True</IsPublishable>
-    <Version>$(Cxx) 1.1</Version>
+    <Version>$(Cxx) 1.2</Version>
     <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
 
@@ -25,7 +25,9 @@
   <ItemGroup>
     <Reference Include="BaseTools">
       <HintPath>..\..\CxxLibs\BaseTools\bin\Debug\netstandard2.1\BaseTools.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="WinAPIWrapper">
+      <HintPath>..\..\CxxLibs\WinAPIWrapper\bin\Debug\netstandard2.1\WinAPIWrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
 

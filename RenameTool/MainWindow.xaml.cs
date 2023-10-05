@@ -18,18 +18,16 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-
-using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Data;
 using System.Windows.Documents;
-//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
-
+using WinAPIWrapper;
+using WinAPIWrapper.ObjectInfo;
 
 namespace RenameTool
 {
@@ -86,7 +84,7 @@ namespace RenameTool
 
             btnApply.Dispatcher.Invoke(new Action(() =>
             {
-                btnApply.IsEnabled = !(this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0);
+                btnApply.IsEnabled = !((this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0));// || ToTiengVietKhongDau;
                 btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
             }));
         }
@@ -145,17 +143,16 @@ namespace RenameTool
 
         private void GenerateNewName(List<KeyValuePair<string, ItemInfo>> items)
         {
-            if (RegexPattern == "" ||
+            if (
+                //RegexPattern == "" ||
                 this[nameof(ReplaceWith)].Length > 0 ||
                 this[nameof(RegexPattern)].Length > 0 ||
                 items.Count == 0
-               )
-                return;
+               ) return;
             foreach (var item in items)
             {
                 Task.Run(() =>
                 {
-
                     string targetName = IncludeExtension ? item.Value.Name : item.Value.NameWithoutExtension;
 
                     if (UseRegex && (RegexPattern != "^") && (RegexPattern != "$"))
@@ -183,6 +180,7 @@ namespace RenameTool
                     if (TitleCase) { item.Value.NewName = StringHandler.Proper(item.Value.NewName); }
                     if (ToTiengVietKhongDau) { item.Value.NewName = StringHandler.TiengVietKhongDau(item.Value.NewName); }
                 });
+
             }
 
         }
@@ -447,15 +445,16 @@ namespace RenameTool
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
-
             ApplyNewName();
             //Items.Clear();
             //Items = GenerateItemsSource(DroppedItems);
             //GenerateNewName(Items);
 
-            
+
             lscItems.ItemsSource = null;
             lscItems.ItemsSource = Items;
+
+            this.Activate();
 
         }
 
@@ -475,7 +474,12 @@ namespace RenameTool
                 {
                     try
                     {
-                        fileInfo.MoveTo(file.Value.Location + System.IO.Path.DirectorySeparatorChar + file.Value.NewName);
+                        if (!string.IsNullOrEmpty(file.Value.NewName))
+                        {
+                            string newName = file.Value.Location + System.IO.Path.DirectorySeparatorChar + file.Value.NewName;
+                            if (!File.Exists(newName))
+                            { fileInfo.MoveTo(newName); }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -484,7 +488,7 @@ namespace RenameTool
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);
                         this.Close();
-                        Application.Current.Shutdown();
+                        Application.Current?.Shutdown();
                     }
                     foreach (var item in DroppedItems)
                     {
@@ -493,35 +497,61 @@ namespace RenameTool
                 }
             }
 
+
+            //List openning window explorer
+            var processExplorer = Process.GetProcessesByName("explorer").FirstOrDefault();
+            List<WindowInfo> explorerWindows = new List<WindowInfo>();
+            if (processExplorer != null)
+            {
+                explorerWindows = WinAPI.GetWindowsByProcessID((uint)processExplorer.Id).ToList();
+            }
+
+
             foreach (var folder in folderList)
             {
                 var dirInfo = new DirectoryInfo(folder.Value.FullName);
                 if (dirInfo.Exists)
                 {
-
-                    if (!(string.Compare(folder.Value.Name, (folder.Value.NewName), true) == 0))
+                    //Handle the Windows Explorer openning the rename-folder or child folder of it
+                    if (explorerWindows.Count > 0)
                     {
-                        try
+                        foreach (var window in explorerWindows)
                         {
-                            dirInfo.MoveTo((folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName).Replace("\\\\", "\\"));
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Fail rename folder: " + folder.Key + "\n" + ex.Message + "\nCLOSE ALL EXPLORER AND TRY AGAIN!",
-                                "ERROR",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
-                            this.Close();
-                            Application.Current.Shutdown();
+                            while (GetOpenningAddress(window).Contains(folder.Key))
+                            {
+                                Up2Parent(window);
+                                Thread.Sleep(50);
+                            }
                         }
 
                     }
-                    foreach (var item in DroppedItems)
+
+                    //Rename folder
+                    if (!string.IsNullOrEmpty(folder.Value.NewName) &&
+                        (string.Compare(folder.Value.Name, (folder.Value.NewName), true) != 0))
                     {
-                        if (item.Replace(@"\\", @"\") == folder.Key)
+                        try
                         {
-                            newDroppedItems.Add((folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName).Replace(@"\\", @"\"));
-                            break;
+                            string newPath = (folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName).Replace("\\\\", "\\");
+                            if (!Directory.Exists(newPath)) dirInfo.MoveTo(newPath);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Fail rename folder: " + folder.Key + "\n" + ex.Message + "\nCLOSE ALL OTHER PROGRAM AND TRY AGAIN!",
+                                "ERROR",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            //this.Close();
+                            //Application.Current.Shutdown();
+                        }
+
+                        foreach (var item in DroppedItems)
+                        {
+                            if (item.Replace(@"\\", @"\") == folder.Key)
+                            {
+                                newDroppedItems.Add((folder.Value.Location + System.IO.Path.DirectorySeparatorChar + folder.Value.NewName).Replace(@"\\", @"\"));
+                                break;
+                            }
                         }
                     }
                 }
@@ -529,6 +559,29 @@ namespace RenameTool
 
             DroppedItems.Clear();
             DroppedItems = newDroppedItems;
+        }
+
+        private string GetOpenningAddress(WindowInfo windowInfo)
+        {
+            var controlAddress = windowInfo.GetControlsByText("Address: ").FirstOrDefault();
+            if (controlAddress == null)
+            {
+                return "";
+            }
+            else
+            {
+                return controlAddress.CaptionText.Remove(0, "Address: ".Length);
+            }
+
+        }
+
+        private void Up2Parent(WindowInfo windowInfo)
+        {
+            var BtnUp = windowInfo.GetControlsByText("Up band").FirstOrDefault();
+            if (BtnUp != null)
+            {
+                WinAPI.SendLeftClickToControl(BtnUp.Handle);
+            }
         }
     }
 }
