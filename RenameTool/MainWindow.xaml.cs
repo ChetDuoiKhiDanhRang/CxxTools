@@ -39,22 +39,39 @@ namespace RenameTool
         public MainWindow()
         {
             InitializeComponent();
-            DroppedItems = new List<string>();
         }
 
+
+        bool loadDone = false;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.DataContext = this;
             LoadSettings();
 
-            //PropertyChanged += OnPropertyChanged;
+            string[] tmp_args = Environment.GetCommandLineArgs();
+            if (tmp_args.Length >= 1)
+            {
+                for (int i = 1; i < tmp_args.Length; i++)
+                {
+                    MessageBox.Show(tmp_args[i]);
+                    if (tmp_args[i].EndsWith(System.IO.Path.DirectorySeparatorChar))
+                    {
+                        DroppedItems.Add(tmp_args[i].Remove(tmp_args[i].Length - 1));
+                    }
+                    else
+                    {
+                        DroppedItems.Add(tmp_args[i]);
+                    }
 
+                }
+            }
 
-
-            
+            //DroppedItems;
 
             lscItems.ItemsSource = Items;
             lblVer.Text = "App version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "; Framework: " + AppContext.TargetFrameworkName;
+
+            OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -308,7 +325,7 @@ namespace RenameTool
         }
 
         //store dropped items
-        List<string> droppedItems;
+        List<string> droppedItems = new List<string>();
         public List<string> DroppedItems
         {
             get => droppedItems;
@@ -597,24 +614,5 @@ namespace RenameTool
             }
         }
 
-        private void Window_ContentRendered(object sender, EventArgs e)
-        {
-
-            string[] args = Environment.GetCommandLineArgs();
-            List<string> preDroppedItems = new List<string>();
-            if (args.Length > 1)
-            {
-                MessageBox.Show(args.Length.ToString());
-                //MessageBox.Show(x[2]);
-                //this.DroppedItems.Add(x[1]);
-                for (int i = 1; i < args.Length; i++)
-                {
-                    preDroppedItems.Add(args[i]);
-                }
-            }
-
-            DroppedItems = (preDroppedItems);
-            MessageBox.Show(DroppedItems.Count.ToString());
-        }
     }
 }

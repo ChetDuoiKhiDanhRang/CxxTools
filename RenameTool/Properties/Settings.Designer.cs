@@ -38,12 +38,12 @@ namespace RenameTool.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CaseSensitive {
+        public bool RemoveJunkSpace {
             get {
-                return ((bool)(this["CaseSensitive"]));
+                return ((bool)(this["RemoveJunkSpace"]));
             }
             set {
-                this["CaseSensitive"] = value;
+                this["RemoveJunkSpace"] = value;
             }
         }
         
@@ -61,7 +61,7 @@ namespace RenameTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IncludeExtension {
             get {
                 return ((bool)(this["IncludeExtension"]));
@@ -116,6 +116,18 @@ namespace RenameTool.Properties {
             }
             set {
                 this["ReplaceWith"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CaseSensitive {
+            get {
+                return ((bool)(this["CaseSensitive"]));
+            }
+            set {
+                this["CaseSensitive"] = value;
             }
         }
     }
