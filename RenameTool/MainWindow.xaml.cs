@@ -66,8 +66,6 @@ namespace RenameTool
                 }
             }
 
-            //DroppedItems;
-
             lscItems.ItemsSource = Items;
             lblVer.Text = "App version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "; Framework: " + AppContext.TargetFrameworkName;
 
