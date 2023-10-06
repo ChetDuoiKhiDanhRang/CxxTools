@@ -39,15 +39,19 @@ namespace RenameTool
         public MainWindow()
         {
             InitializeComponent();
+            DroppedItems = new List<string>();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.DataContext = this;
+            LoadSettings();
 
             //PropertyChanged += OnPropertyChanged;
 
-            LoadSettings();
+
+
+            
 
             lscItems.ItemsSource = Items;
             lblVer.Text = "App version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "; Framework: " + AppContext.TargetFrameworkName;
@@ -89,23 +93,23 @@ namespace RenameTool
             }));
         }
 
-        private List<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> files)
+        private List<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> droppedItems)
         {
             var Items = new Dictionary<string, ItemInfo>();
             int count = 0;
-            foreach (string file in files)
+            foreach (string droppedItem in droppedItems)
             {
-                var ii = ItemInfo.CreateItemInfo(file);
-                ii.RootLevel = ii.Level;
-                ii.IndexString = count++.ToString();
+                var item = ItemInfo.CreateItemInfo(droppedItem);
+                item.RootLevel = item.Level;
+                item.IndexString = count++.ToString();
 
                 //add the dragged in files and folders
-                if (!Items.Keys.Contains(ii.FullName)) Items.Add(ii.FullName, ii);
+                if (!Items.Keys.Contains(item.FullName)) Items.Add(item.FullName, item);
 
                 // if included child items
-                if (IncludeFilesAndSubFolders && !ii.IsFile)
+                if (IncludeFilesAndSubFolders && !item.IsFile)
                 {
-                    DirectoryInfo di = new DirectoryInfo(file);
+                    DirectoryInfo di = new DirectoryInfo(droppedItem);
 
                     //add sub folders
                     foreach (DirectoryInfo directoryItem in di.GetDirectories("*", SearchOption.AllDirectories))
@@ -113,7 +117,7 @@ namespace RenameTool
                         if (!Items.Keys.Contains(directoryItem.FullName))
                         {
                             ItemInfo subii = new ItemInfo(directoryItem);
-                            subii.RootLevel = ii.Level;
+                            subii.RootLevel = item.Level;
 
                             //set parent of folder
                             subii.Parent = Items[System.IO.Path.GetDirectoryName(directoryItem.FullName)];
@@ -128,7 +132,7 @@ namespace RenameTool
                         if (!Items.Keys.Contains(fileInfo.FullName))
                         {
                             ItemInfo subii = new ItemInfo(fileInfo);
-                            subii.RootLevel = ii.Level;
+                            subii.RootLevel = item.Level;
                             subii.Parent = Items[System.IO.Path.GetDirectoryName(fileInfo.FullName)];
                             Items.Add(fileInfo.FullName, subii);
                         }
@@ -304,7 +308,7 @@ namespace RenameTool
         }
 
         //store dropped items
-        List<string> droppedItems = new List<string>();
+        List<string> droppedItems;
         public List<string> DroppedItems
         {
             get => droppedItems;
@@ -410,14 +414,6 @@ namespace RenameTool
             files.Sort();
 
             DroppedItems = files;
-            //DroppedItems.Clear();
-            //DroppedItems.AddRange(files);
-            //Items = GenerateItemsSource(DroppedItems);
-            //GenerateNewName(Items);
-
-
-            //lscItems.ItemsSource = null;
-            //lscItems.ItemsSource = Items;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -589,6 +585,36 @@ namespace RenameTool
             {
                 WinAPI.SendLeftClickToControl(BtnUp.Handle);
             }
+        }
+
+        private void lscItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (lscItems.SelectedItem != null)
+            {
+                KeyValuePair<string, ItemInfo> i = (KeyValuePair<string, ItemInfo>)lscItems.SelectedItem;
+                string path = i.Key;
+                Process.Start("explorer", path);
+            }
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+
+            string[] args = Environment.GetCommandLineArgs();
+            List<string> preDroppedItems = new List<string>();
+            if (args.Length > 1)
+            {
+                MessageBox.Show(args.Length.ToString());
+                //MessageBox.Show(x[2]);
+                //this.DroppedItems.Add(x[1]);
+                for (int i = 1; i < args.Length; i++)
+                {
+                    preDroppedItems.Add(args[i]);
+                }
+            }
+
+            DroppedItems = (preDroppedItems);
+            MessageBox.Show(DroppedItems.Count.ToString());
         }
     }
 }

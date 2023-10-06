@@ -16,6 +16,8 @@
     <None Remove="imgs\file.png" />
     <None Remove="imgs\folder.png" />
     <None Remove="imgs\icon24.png" />
+    <None Remove="imgs\tasks.ico" />
+    <None Remove="imgs\tasks.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +39,7 @@
     <Resource Include="imgs\icon24.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="imgs\tasks.png" />
   </ItemGroup>
 
   <ItemGroup>

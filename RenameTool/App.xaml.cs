@@ -13,5 +13,8 @@ namespace RenameTool
     /// </summary>
     public partial class App : Application
     {
+        
+        
+        
     }
 }
