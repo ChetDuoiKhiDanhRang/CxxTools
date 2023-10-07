@@ -18,7 +18,7 @@
         >
     <Window.Resources>
         <ResourceDictionary>
-            <local:TypeConverter x:Key="TypeConverter" />
+            <local:FileFolder2BoolConverter x:Key="FileFolder2BoolConverter" />
             <local:ItemInfoToTooltipConverter x:Key="ItemLocationConverter" />
             <local:LevelDetermine x:Key="LevelDetermine"/>
         </ResourceDictionary>
@@ -305,7 +305,7 @@
 
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center"
-                                            Source="{Binding Value.IsFile, Converter={StaticResource TypeConverter}}"
+                                            Source="{Binding Value.IsFile, Converter={StaticResource FileFolder2BoolConverter}}"
                                             ToolTip="{Binding Value, Converter={StaticResource ItemLocationConverter }}"
                                             
                                             />

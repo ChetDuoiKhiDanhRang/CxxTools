@@ -28,6 +28,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WinAPIWrapper;
 using WinAPIWrapper.ObjectInfo;
+//using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RenameTool
 {
@@ -49,11 +50,11 @@ namespace RenameTool
             LoadSettings();
 
             string[] tmp_args = Environment.GetCommandLineArgs();
-            if (tmp_args.Length >= 1)
+
+            if (tmp_args.Length >= 2)
             {
                 for (int i = 1; i < tmp_args.Length; i++)
                 {
-                    MessageBox.Show(tmp_args[i]);
                     if (tmp_args[i].EndsWith(System.IO.Path.DirectorySeparatorChar))
                     {
                         DroppedItems.Add(tmp_args[i].Remove(tmp_args[i].Length - 1));
@@ -62,8 +63,8 @@ namespace RenameTool
                     {
                         DroppedItems.Add(tmp_args[i]);
                     }
-
                 }
+                //DroppedItems.Add("D:\\Setup\\Windows");
             }
 
             lscItems.ItemsSource = Items;

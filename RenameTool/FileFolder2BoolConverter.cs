@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace RenameTool
 {
-    internal class TypeConverter : IValueConverter
+    internal class FileFolder2BoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
