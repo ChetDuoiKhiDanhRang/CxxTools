@@ -92,10 +92,6 @@
             </Style>
 
         </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="471*"/>
-            <ColumnDefinition Width="319*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
             <RowDefinition Height="1"/>
