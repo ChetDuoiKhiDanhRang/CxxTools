@@ -333,6 +333,7 @@ namespace RenameTool
             {
                 droppedItems = value;
                 OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs($"{nameof(DroppedItems)}"));
             }
         }
 

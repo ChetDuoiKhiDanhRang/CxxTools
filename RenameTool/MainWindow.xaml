@@ -21,6 +21,7 @@
             <local:FileFolder2BoolConverter x:Key="FileFolder2BoolConverter" />
             <local:ItemInfoToTooltipConverter x:Key="ItemLocationConverter" />
             <local:LevelDetermine x:Key="LevelDetermine"/>
+            <local:DroppedItems2Visibility x:Key="DroppedItems2Visibility"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="5">
@@ -330,6 +331,17 @@
             </ListView.ItemContainerStyle>
         </ListView>
 
+        <TextBlock 
+            Grid.Row="2"
+            Margin="0,48,0,48"
+            Text="Drop file/folder here"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            FontSize="48"
+            Visibility="{Binding DroppedItems, Converter={StaticResource DroppedItems2Visibility} }"
+            Foreground="#44228888"/>
+
         <Border 
             x:Name="stastusBar"
             BorderBrush="#005A9E"
@@ -341,12 +353,19 @@
                 <TextBlock Text="{Binding FilesCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" FontSize="11" VerticalAlignment="Center"/>
                 <Image Source="{StaticResource FolderIcon}" MaxHeight="16" Margin="8,0,2,0" DockPanel.Dock="Left"/>
                 <TextBlock Text="{Binding FoldersCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" FontSize="11" VerticalAlignment="Center"/>
-                <TextBlock x:Name="lblVer"
-                       FontSize="11" 
-                       FontStyle="Italic"
-                       Foreground="#005A9E"
-                       HorizontalAlignment="Center"
-                       />
+                <!--<ToggleButton 
+                    DockPanel.Dock="Right" 
+                    VerticalAlignment="Center"
+                    ToolTip="Folder background context menu"
+                    IsChecked="False"
+                    Content="Context menu"/>-->
+                <TextBlock 
+                    x:Name="lblVer"
+                    FontSize="11" 
+                    FontStyle="Italic"
+                    Foreground="#005A9E"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
             </DockPanel>
         </Border>
     </Grid>
