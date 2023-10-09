@@ -28,6 +28,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WinAPIWrapper;
 using WinAPIWrapper.ObjectInfo;
+using System.Security.Principal;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RenameTool
@@ -68,7 +69,7 @@ namespace RenameTool
             }
 
             lscItems.ItemsSource = Items;
-            lblVer.Text = "App version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "; Framework: " + AppContext.TargetFrameworkName;
+            lblVer.Text = "App ver: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "; Framework: " + AppContext.TargetFrameworkName + "; " + (IsAdministrator()? "Administrator":"Others");
 
             OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
         }
@@ -611,6 +612,13 @@ namespace RenameTool
                 string path = i.Key;
                 Process.Start("explorer", path);
             }
+        }
+
+        public bool IsAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
     }
