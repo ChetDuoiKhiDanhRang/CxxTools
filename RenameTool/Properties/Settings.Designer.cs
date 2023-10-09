@@ -97,7 +97,7 @@ namespace RenameTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("$")]
         public string RegexPattern {
             get {
                 return ((string)(this["RegexPattern"]));
