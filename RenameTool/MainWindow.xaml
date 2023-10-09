@@ -246,8 +246,8 @@
                             <TextBlock Text="Apply new name" VerticalAlignment="Center">
                                 <TextBlock.Foreground>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="Black" Offset="0.8"/>
-                                        <GradientStop Color="#005A9E" Offset="0.2"/>
+                                        <GradientStop Color="Black" Offset="0.2"/>
+                                        <GradientStop Color="#005A9E" Offset="0.8"/>
                                     </LinearGradientBrush>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -272,6 +272,7 @@
                         <GridViewColumn>
                             <GridViewColumn.Header>
                                 <CheckBox
+                                    VerticalAlignment="Center"
                                     Content="All" 
                                     x:Name="ckbCheckAll" 
                                     IsChecked="{x:Null}"
@@ -303,20 +304,19 @@
                                             Height="16"
                                             MaxHeight="16"
                                             MaxWidth="16"
-
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center"
                                             Source="{Binding Value.IsFile, Converter={StaticResource FileFolder2BoolConverter}}"
                                             ToolTip="{Binding Value, Converter={StaticResource ItemLocationConverter }}"
-                                            
                                             />
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding Value.Name}"/>
+                                        <TextBlock Foreground="Black" VerticalAlignment="Center" Text="{Binding Value.Name}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="New name"
-                                        DisplayMemberBinding="{Binding Value.NewName}"/>
+                        <GridViewColumn 
+                            Header="New name"
+                            DisplayMemberBinding="{Binding Value.NewName}"/>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>
@@ -331,6 +331,7 @@
         </ListView>
 
         <Border 
+            x:Name="stastusBar"
             BorderBrush="#005A9E"
             BorderThickness="2"
             CornerRadius="3"
