@@ -9,6 +9,9 @@
         <BitmapImage x:Key="FolderIcon" UriSource="./imgs/folder.png"/>
         <BitmapImage x:Key="FileIcon" UriSource="./imgs/file.png"/>
         <SolidColorBrush x:Key="ErrorColor" Color="#e81b2c"/>
+        <SolidColorBrush x:Key="Cyan1" Color="#004D4D"/>
+        <SolidColorBrush x:Key="Cyan2" Color="#007070"/>
+        
         <!--<properties:Settings x:Key="AppSettings"/>-->
     </Application.Resources>
 </Application>

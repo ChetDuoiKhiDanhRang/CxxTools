@@ -15,6 +15,7 @@
         PreviewDragEnter="Window_DragEnter"
         PreviewDrop="Window_Drop"
         Closing="Window_Closing"
+        Foreground="#007070"
         >
     <Window.Resources>
         <ResourceDictionary>
@@ -112,7 +113,7 @@
         <Border
             Grid.Row="0"
             VerticalAlignment="Top"
-            Background="#005A9E"
+            Background="{StaticResource Cyan2}"
             BorderThickness="1"
             CornerRadius="3" Grid.ColumnSpan="2"
             >
@@ -145,7 +146,7 @@
             Grid.Row="0"
             Margin="0,40,0,0"
             VerticalAlignment="Top"
-            Background="#005A9E"
+            Background="{StaticResource Cyan2}"
             BorderThickness="1"
             CornerRadius="3" Grid.ColumnSpan="2"
             >
@@ -221,14 +222,13 @@
             <Border 
                 Margin="24,0,0,0"
                 BorderThickness="2" 
-                BorderBrush="#EE005A9E"
+                BorderBrush="#007070"
                 CornerRadius="3"
                 >
                 <Button
                     x:Name="btnApply"
                     VerticalAlignment="Stretch"
                     FontWeight="Bold"
-                    Foreground="#EE005A9E"
                     BorderBrush="Transparent"
                     Background="Transparent"
                     Click="btnApply_Click"
@@ -248,7 +248,7 @@
                                 <TextBlock.Foreground>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                         <GradientStop Color="Black" Offset="0.2"/>
-                                        <GradientStop Color="#005A9E" Offset="0.8"/>
+                                        <GradientStop Color="#004D4D" Offset="0.8"/>
                                     </LinearGradientBrush>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -263,9 +263,8 @@
             Margin="0,15,0,35"
             Grid.Row="2"
             BorderThickness="2"
-            BorderBrush="#005A9E"
-            
-            SelectionMode="Single" Grid.ColumnSpan="2"
+            BorderBrush="#007070"
+            SelectionMode="Single"
             >
             <ListView.View>
                 <GridView>
@@ -317,7 +316,13 @@
                         </GridViewColumn>
                         <GridViewColumn 
                             Header="New name"
-                            DisplayMemberBinding="{Binding Value.NewName}"/>
+                            >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="{StaticResource Cyan1}" VerticalAlignment="Center" Text="{Binding Value.NewName}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>
@@ -344,7 +349,7 @@
 
         <Border 
             x:Name="stastusBar"
-            BorderBrush="#005A9E"
+            BorderBrush="#007070"
             BorderThickness="2"
             CornerRadius="3"
             Background="WhiteSmoke" Grid.Row="2" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
@@ -363,7 +368,6 @@
                     x:Name="lblVer"
                     FontSize="11" 
                     FontStyle="Italic"
-                    Foreground="#005A9E"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"/>
             </DockPanel>
