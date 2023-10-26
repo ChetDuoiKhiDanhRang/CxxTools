@@ -69,7 +69,8 @@ namespace RenameTool
             }
 
             lscItems.ItemsSource = Items;
-            lblVer.Text = "App ver: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "; Framework: " + AppContext.TargetFrameworkName + "; Run as: " + (IsAdministrator()? "Administrator":"Others");
+            lblVer.Text = "App ver: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +
+                "; Framework: " + AppContext.TargetFrameworkName + "; Run as: " + (IsAdministrator() ? "Administrator" : "Others");
 
             OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
         }
@@ -108,6 +109,18 @@ namespace RenameTool
                 btnApply.IsEnabled = !((this[nameof(RegexPattern)].Length > 0 || this[nameof(ReplaceWith)].Length > 0));// || ToTiengVietKhongDau;
                 btnApply.Foreground = btnApply.IsEnabled ? (new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 90, 158))) : (new SolidColorBrush(System.Windows.Media.Color.FromArgb(55, 88, 88, 88)));
             }));
+
+            if (e.PropertyName == nameof(IntegrateToFolderBackgroundMenu))
+            {
+                if (IntegrateToFolderBackgroundMenu)
+                {
+                    AddApp2ContextMenu();
+                }
+                else
+                {
+                    RemoveAppFromContextMenu();
+                }
+            }
         }
 
         private List<KeyValuePair<string, ItemInfo>> GenerateItemsSource(List<string> droppedItems)
@@ -217,6 +230,7 @@ namespace RenameTool
 
             RegexPattern = Properties.Settings.Default.RegexPattern;
             ReplaceWith = Properties.Settings.Default.ReplaceWith;
+            IntegrateToFolderBackgroundMenu = Properties.Settings.Default.ContextMenu;
         }
 
         private void SaveSettings()
@@ -230,11 +244,23 @@ namespace RenameTool
             x.ToTiengVietKhongDau = ToTiengVietKhongDau;
             x.RegexPattern = RegexPattern;
             x.ReplaceWith = ReplaceWith;
+            x.ContextMenu = IntegrateToFolderBackgroundMenu;
             x.Save();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+
+        bool integrateToFolderBackgroundMenu;
+        public bool IntegrateToFolderBackgroundMenu
+        {
+            get => integrateToFolderBackgroundMenu;
+            set
+            {
+                integrateToFolderBackgroundMenu = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(IntegrateToFolderBackgroundMenu)));
+            }
+        }
 
         bool useRegex = true;
         public bool UseRegex
@@ -375,6 +401,7 @@ namespace RenameTool
         }
 
         public string Error => string.Empty;
+
 
         public string this[string columnName]
         {
@@ -622,5 +649,28 @@ namespace RenameTool
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        private void AddApp2ContextMenu()
+        {
+            var reg = Registry.ClassesRoot.CreateSubKey("Directory\\background\\shell\\Cxx-RenameTool", true);
+
+            var val_regValName = string.Empty;
+            var val_contextName = "Rename tool";
+            reg.SetValue(string.Empty, val_contextName);
+
+            var val_IconValName = "Icon";
+            var val_IconPath = AppContext.BaseDirectory + Assembly.GetExecutingAssembly().GetName().Name + ".exe";
+            reg.SetValue(val_IconValName, val_IconPath);
+
+            reg.CreateSubKey("command", true).SetValue(string.Empty, $"\"{val_IconPath}\" \"%V\"");
+        }
+
+        private void RemoveAppFromContextMenu()
+        {
+            var reg = Registry.ClassesRoot.CreateSubKey("Directory\\background\\shell", true);
+            if (reg.OpenSubKey("Cxx-RenameTool") != null)
+            {
+                reg.DeleteSubKeyTree("Cxx-RenameTool");
+            }
+        }
     }
 }

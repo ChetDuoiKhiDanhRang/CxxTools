@@ -8,7 +8,7 @@
     <ApplicationIcon>imgs\ico.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <IsPublishable>True</IsPublishable>
-    <Version>$(Cxx) 1.3</Version>
+    <Version>$(Cxx) 1.6</Version>
     <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
 

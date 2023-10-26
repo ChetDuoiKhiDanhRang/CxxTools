@@ -358,12 +358,17 @@
                 <TextBlock Text="{Binding FilesCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" FontSize="11" VerticalAlignment="Center"/>
                 <Image Source="{StaticResource FolderIcon}" MaxHeight="16" Margin="8,0,2,0" DockPanel.Dock="Left"/>
                 <TextBlock Text="{Binding FoldersCount, Mode=OneWay}" Margin="0,0,0,0" DockPanel.Dock="Left" FontSize="11" VerticalAlignment="Center"/>
-                <!--<ToggleButton 
+                <CheckBox 
                     DockPanel.Dock="Right" 
+                    FontSize="11"
                     VerticalAlignment="Center"
-                    ToolTip="Folder background context menu"
-                    IsChecked="False"
-                    Content="Context menu"/>-->
+                    ToolTip="Folder's background context menu"
+                    IsChecked="{Binding IntegrateToFolderBackgroundMenu, Mode=TwoWay}"
+                    Margin="0,0,2,0"
+                    VerticalContentAlignment="Center"
+                    Foreground="{Binding ElementName=lblVer, Path=Foreground}"
+                    Content="Folder's Background Context menu"
+                    />
                 <TextBlock 
                     x:Name="lblVer"
                     FontSize="11" 

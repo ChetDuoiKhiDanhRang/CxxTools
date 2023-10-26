@@ -130,5 +130,17 @@ namespace RenameTool.Properties {
                 this["CaseSensitive"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ContextMenu {
+            get {
+                return ((bool)(this["ContextMenu"]));
+            }
+            set {
+                this["ContextMenu"] = value;
+            }
+        }
     }
 }
