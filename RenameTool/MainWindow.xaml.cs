@@ -70,7 +70,7 @@ namespace RenameTool
 
             lscItems.ItemsSource = Items;
             lblVer.Text = "App ver: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +
-                "; Framework: " + AppContext.TargetFrameworkName + "; Run as: " + (IsAdministrator() ? "Administrator" : "Others");
+                "; Framework: " + AppContext.TargetFrameworkName + "; Run as: " + (IsAdministrator() ? "Administrator" : "Users");
 
             OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
         }
