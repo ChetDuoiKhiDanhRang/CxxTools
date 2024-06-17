@@ -29,6 +29,7 @@ using System.Windows.Shapes;
 using WinAPIWrapper;
 using WinAPIWrapper.ObjectInfo;
 using System.Security.Principal;
+using System.Configuration;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RenameTool
@@ -229,6 +230,7 @@ namespace RenameTool
             ToTiengVietKhongDau = Properties.Settings.Default.ToTiengVietKhongDau;
 
             RegexPattern = Properties.Settings.Default.RegexPattern;
+            //RegexPattern = ConfigurationManager.AppSettings["RegexPattern"];
             ReplaceWith = Properties.Settings.Default.ReplaceWith;
             IntegrateToFolderBackgroundMenu = Properties.Settings.Default.ContextMenu;
         }
@@ -242,8 +244,8 @@ namespace RenameTool
             x.IncludeExtension = IncludeExtension;
             x.IncludeFilesAndSubFolders = IncludeFilesAndSubFolders;
             x.ToTiengVietKhongDau = ToTiengVietKhongDau;
-            x.RegexPattern = RegexPattern;
-            x.ReplaceWith = ReplaceWith;
+            x.RegexPattern = RegexPattern.All(x => x == ' ')? "":RegexPattern;
+            x.ReplaceWith = ReplaceWith.All(x=>x==' ')? "": ReplaceWith;
             x.ContextMenu = IntegrateToFolderBackgroundMenu;
             x.Save();
         }

@@ -134,6 +134,7 @@
                     ValidatesOnDataErrors=True,
                     NotifyOnValidationError=True}"
                     TextWrapping="NoWrap"
+                    AcceptsReturn="False"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
                     BorderBrush="Transparent"
@@ -167,6 +168,7 @@
                     NotifyOnValidationError=True}"
                     Margin="0,1,1,1"
                     TextWrapping="NoWrap"
+                    AcceptsReturn="False"
                     VerticalContentAlignment="Center"
                     Background="#EFEFEF"
                     BorderBrush="Transparent"
