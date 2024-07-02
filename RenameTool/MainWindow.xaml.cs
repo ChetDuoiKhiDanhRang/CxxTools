@@ -244,8 +244,8 @@ namespace RenameTool
             x.IncludeExtension = IncludeExtension;
             x.IncludeFilesAndSubFolders = IncludeFilesAndSubFolders;
             x.ToTiengVietKhongDau = ToTiengVietKhongDau;
-            x.RegexPattern = RegexPattern.All(x => x == ' ')? "":RegexPattern;
-            x.ReplaceWith = ReplaceWith.All(x=>x==' ')? "": ReplaceWith;
+            x.RegexPattern = RegexPattern.All(x => x == ' ') ? "" : RegexPattern;
+            x.ReplaceWith = ReplaceWith.All(x => x == ' ') ? "" : ReplaceWith;
             x.ContextMenu = IntegrateToFolderBackgroundMenu;
             x.Save();
         }
@@ -360,7 +360,7 @@ namespace RenameTool
             set
             {
                 droppedItems = value;
-                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
+                //OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(DroppedItems)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs($"{nameof(DroppedItems)}"));
             }
         }
@@ -535,7 +535,11 @@ namespace RenameTool
                     }
                     foreach (var item in DroppedItems)
                     {
-                        if (item == file.Key) { newDroppedItems.Add(fileInfo.FullName); break; }
+                        if (item == file.Key)
+                        {
+                            newDroppedItems.Add(fileInfo.FullName);
+                            break;
+                        }
                     }
                 }
             }
@@ -604,11 +608,8 @@ namespace RenameTool
                 }
             }
 
-            if (newDroppedItems.Count > 0)
-            {
-                DroppedItems.Clear();
-                DroppedItems = newDroppedItems;
-            }
+
+            DroppedItems = (newDroppedItems.Count > 0) ? newDroppedItems : DroppedItems;
         }
 
         private string GetOpenningAddress(WindowInfo windowInfo)
