@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RenameTool\RenameTool.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="imgs\app.ico" />
     <Resource Include="imgs\icon.png" />
     <Resource Include="imgs\icon_24.png" />
