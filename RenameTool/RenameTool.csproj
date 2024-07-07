@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows7.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>imgs\ico.ico</ApplicationIcon>
@@ -11,7 +10,6 @@
     <Version>$(Cxx) 1.8.2</Version>
     <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="imgs\file.png" />
     <None Remove="imgs\folder.png" />
@@ -19,11 +17,9 @@
     <None Remove="imgs\tasks.ico" />
     <None Remove="imgs\tasks.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="imgs\ico.ico" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="BaseTools">
       <HintPath>..\..\CxxLibs\BaseTools\bin\Debug\netstandard2.1\BaseTools.dll</HintPath>
@@ -32,7 +28,6 @@
       <HintPath>..\..\CxxLibs\WinAPIWrapper\bin\Debug\netstandard2.1\WinAPIWrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="imgs\file.png" />
     <Resource Include="imgs\folder.png" />
@@ -41,7 +36,6 @@
     </Resource>
     <Resource Include="imgs\tasks.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -49,12 +43,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
 </Project>
