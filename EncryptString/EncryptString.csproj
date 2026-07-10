@@ -2,24 +2,25 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>imgs\app.ico</ApplicationIcon>
-    <AssemblyVersion>1.1</AssemblyVersion>
-    <FileVersion>1.1</FileVersion>
+    <AssemblyVersion>2.1</AssemblyVersion>
+    <FileVersion>2.1</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="imgs\copy_24.png" />
-    <None Remove="imgs\icon.png" />
     <None Remove="imgs\icon_24.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="BaseTools">
-      <HintPath>..\..\CxxLibs\BaseTools\bin\Debug\netstandard2.1\BaseTools.dll</HintPath>
+      <HintPath>..\..\CxxLibs\BaseTools\bin\Debug\netstandard2.0\BaseTools.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
 
@@ -35,6 +36,13 @@
     <Resource Include="imgs\icon_24.png" />
     <Resource Include="imgs\LeftAr_24.png" />
     <Resource Include="imgs\RightAr_24.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="imgs\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
